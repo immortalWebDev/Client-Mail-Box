@@ -12,7 +12,6 @@ const mailSlice = createSlice({
     addToInbox: (state, action) => {
       state.mails.push(...action.payload);
     },
-
     setIsChecked: (state, action) => {
       const { id, selector } = action.payload;
 
@@ -51,6 +50,7 @@ const mailSlice = createSlice({
         });
       }
     },
+
     moveFromInbox: (state, action) => {
       const { move, email } = action.payload;
       state.mails = state.mails.map((mail) => {
@@ -71,34 +71,31 @@ const mailSlice = createSlice({
       });
     },
 
-    
-    
+    moveFromSent: (state, action) => {
+      const { move, email } = action.payload;
+      state.mails = state.mails.map((mail) => {
+        if (mail.isChecked && mail.sender === email) {
+          return {
+            ...mail,
+            isTrashed: move === "toTrash",
+          };
+        }
+        return mail;
+      });
+    },
+
     setRead: (state, action) => {
       const { id } = action.payload;
       const mailItem = state.mails.find((mail) => mail.id === id);
       mailItem.isRead = true;
     },
-    
 
-   
     emptyTrash: (state) => {
       state.mails = state.mails.filter((mail) => mail.isTrashed === false);
     },
   },
 });
 
-export const {
-  addToInbox,
-  setIsChecked,
-  moveFromInbox,
-  moveFromSentbox,
-  setRead,
- 
- 
- 
- 
- 
-  emptyTrash,
- 
-} = mailSlice.actions;
+export const { addToInbox, moveFromInbox, moveFromSent, setRead, emptyTrash } =
+  mailSlice.actions;
 export default mailSlice.reducer;
