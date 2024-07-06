@@ -18,7 +18,7 @@ function App() {
 
   useEffect(() => {
     const fetchData = async () => {
-      
+
 
       try {
         const responses = await Promise.all([
@@ -45,7 +45,7 @@ function App() {
           }));
 
         const allMails = [...sentMailItems, ...inboxMails];
-        
+
         dispatch(addToInbox(allMails));
       } catch (error) {
         console.log("Error fetching mails:", error);
@@ -82,6 +82,9 @@ function App() {
     };
 
    fetchSentMails()
+   const interval = setInterval(fetchSentMails, 2000);
+    return () => clearInterval(interval);
+    
   }, [dispatch, recipientMail, email, mails]);
 
   return (
