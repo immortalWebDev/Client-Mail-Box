@@ -20,9 +20,17 @@ const authSlice = createSlice({
       state.idToken = idToken;
       state.email = email;
     },
+    logout: (state) => {
+      localStorage.removeItem("idToken");
+      localStorage.removeItem("email");
+      localStorage.removeItem("isAuthenticated");
+      state.isAuthenticated = false;
+      state.idToken = "";
+      state.email = "";
+    },
   },
 });
 
-export const { signUp, login } =
+export const { signUp, login, logout} =
   authSlice.actions;
 export default authSlice.reducer;
