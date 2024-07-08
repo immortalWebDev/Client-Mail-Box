@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { logout } from "../../store/authSlice";
 
 const Logout = () => {
-
+  
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -16,7 +16,7 @@ const Logout = () => {
     <Button
       onClick={logoutHandler}
       variant="light"
-      
+      className="border-2 rounded-2 bg-danger text-light"
     >
       Logout
     
