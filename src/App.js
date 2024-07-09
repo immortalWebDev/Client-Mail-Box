@@ -1,91 +1,107 @@
-import { useEffect } from "react";
+import { useEffect} from "react";
 import SignUp from "./component/userAuth/SignUp";
 import Sidebar from "./Pages/Sidebar";
 import { useSelector, useDispatch } from "react-redux";
 import { Route, Switch, Redirect } from "react-router-dom";
-import { addToInbox} from "./store/mailSlice";
-import axios from "axios";
+import { addToInbox, clearInbox } from "./store/mailSlice";
+import useFetch from "./hooks/useFetch";
 
 function App() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const recipientMail = useSelector((state) => state.auth.email);
+
+  const { fetchData } = useFetch();
   const email = isAuthenticated ? recipientMail.replace(/[.]/g, "") : undefined;
   const mails = useSelector((state) => state.mail.mails);
   const dispatch = useDispatch();
 
-  const url1 = "https://mail-box-piyush-default-rtdb.firebaseio.com/emails.json";
+  const url1 =
+    "https://mail-box-piyush-default-rtdb.firebaseio.com/emails.json";
   const url2 = `https://mail-box-piyush-default-rtdb.firebaseio.com/sent-emails/${email}.json`;
 
+  const urls = [url1,url2]
+
   useEffect(() => {
-    const fetchData = async () => {
+    const onSuccess = (responses) => {
 
+      const receivedMails = responses[0]?.data;
+      const sentMails = responses[1]?.data;
 
-      try {
-        const responses = await Promise.all([
-          axios.get(url1),
-          axios.get(url2),
-        ]);
-
-        const receivedMails = responses[0]?.data ?? {};
-        const sentMails = responses[1]?.data ?? {};
-
-        const inboxMails = Object.entries(receivedMails)
-          .filter(([key, mail]) => mail.recipient === recipientMail)
-          .map(([key, mail]) => ({
+      let inboxMails;
+      if (receivedMails) {
+        const entries = Object.entries(receivedMails);
+        const filteredEntries = entries.filter(([key, mail]) => {
+          return mail.recipient === recipientMail;
+        });
+        inboxMails = filteredEntries.map(([key, mail]) => {
+          return {
             ...mail,
             id: key,
             isChecked: false,
-          }));
+          };
+        });
+      } else {
+        inboxMails = [];
+      }
 
-        const sentMailItems = Object.entries(sentMails)
-          .map(([key, mail]) => ({
+      let sentMailItems;
+      if (sentMails) {
+        const entries = Object.entries(sentMails);
+        sentMailItems = entries.map(([key, mail]) => {
+          return {
             ...mail,
             id: key,
             isChecked: false,
-          }));
+          };
+        });
+      } else {
+        sentMailItems = [];
+      }
 
-        const allMails = [...sentMailItems, ...inboxMails];
-
-        dispatch(addToInbox(allMails));
-      } catch (error) {
-        console.log("Error fetching mails:", error);
-      } 
+      const allMails = [...sentMailItems, ...inboxMails];
+      dispatch(addToInbox(allMails));
     };
 
     if (recipientMail) {
-      fetchData();
+      fetchData(urls, "GET", null, onSuccess);
     }
-  }, [recipientMail, dispatch, url1, url2]);
+
+    return () => {
+      dispatch(clearInbox());
+    };
+  }, [recipientMail, dispatch, fetchData, urls]);
 
   useEffect(() => {
-    const fetchSentMails = async () => {
-      const url = `https://mail-box-piyush-default-rtdb.firebaseio.com/sent-emails/${email}.json`;
-
-      try {
-        const response = await axios.get(url);
-        const data = response.data;
-
-        const newMails = Object.keys(data).map(key => ({
-          id: key,
+    const onSuccess = (response) => {
+      const data = response.data;
+      const arr = [];
+      for (const key in data) {
+        const mailItem = {
           ...data[key],
-          isChecked: false
-        }));
-
-        newMails.forEach((mail) => {
-          if (!mails.some((email) => email.id === mail.id)) {
-            dispatch(addToInbox([mail]));
-          }
-        });
-      } catch (error) {
-        console.error('Error fetching sent mails:', error);
+          id: key,
+          isChecked: false,
+        };
+        if (mailItem.recipient === recipientMail) {
+          arr.push(mailItem);
+        }
       }
+      arr.forEach((mail) => {
+        if (!mails.some((email) => email.id === mail.id)) {
+          dispatch(addToInbox([mail]));
+        }
+      });
     };
 
-   fetchSentMails()
-   const interval = setInterval(fetchSentMails, 2000);
-    return () => clearInterval(interval);
-    
-  }, [dispatch, recipientMail, email, mails]);
+    const interval = setInterval(() => {
+      if (recipientMail) {
+        fetchData(url1, "GET", null, onSuccess);
+      }
+    }, 2000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [fetchData, recipientMail, mails, dispatch]);
 
   return (
     <Switch>
