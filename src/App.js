@@ -1,4 +1,4 @@
-import { useEffect} from "react";
+import { useEffect, useMemo } from "react";
 import SignUp from "./component/userAuth/SignUp";
 import Sidebar from "./Pages/Sidebar";
 import { useSelector, useDispatch } from "react-redux";
@@ -19,11 +19,10 @@ function App() {
     "https://mail-box-piyush-default-rtdb.firebaseio.com/emails.json";
   const url2 = `https://mail-box-piyush-default-rtdb.firebaseio.com/sent-emails/${email}.json`;
 
-  const urls = [url1,url2]
+  const urls = useMemo(() => [url1, url2], [url1, url2]);
 
   useEffect(() => {
     const onSuccess = (responses) => {
-
       const receivedMails = responses[0]?.data;
       const sentMails = responses[1]?.data;
 
