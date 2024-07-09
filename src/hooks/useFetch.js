@@ -1,13 +1,16 @@
 import { setMailsLoading } from "../store/mailSlice";
 import { useDispatch } from "react-redux";
+import { useCallback, useEffect } from "react";
+import { showNotification } from "../store/authSlice";
 import axios from "axios";
-import { useCallback } from "react";
 
 const useFetch = () => {
   const dispatch = useDispatch();
-
   const fetchData = useCallback(
     async (urls, method, data = null, onSuccess) => {
+      if (Array.isArray(urls)) {
+        dispatch(setMailsLoading(true));
+      }
 
       try {
         let responses;
@@ -34,12 +37,48 @@ const useFetch = () => {
           onSuccess(responses);
         }
       } catch (error) {
-        const { data } = error.response;
-        console.log(data.error.message);
+        if (!error.response) {
+          dispatch(
+            showNotification({
+              message:
+                "Retrying to connect...You'll be notified when reconnected",
+              variant: "danger",
+            })
+          );
+        } else {
+          const { data } = error.response;
+          console.log(data.error.message);
+        }
+      } finally {
+        if (Array.isArray(urls)) {
+          dispatch(setMailsLoading(false));
+        }
       }
     },
     [dispatch]
   );
+
+  useEffect(() => {
+    const handleOnline = () => {
+      dispatch(
+        showNotification({ message: "Back online again!", variant: "success" })
+      );
+    };
+
+    const handleOffline = () => {
+      dispatch(
+        showNotification({ message: "You are offline!", variant: "danger" })
+      );
+    };
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, [dispatch]);
 
   return { fetchData };
 };
