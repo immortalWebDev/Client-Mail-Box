@@ -1,4 +1,4 @@
-import { NavLink, useHistory } from "react-router-dom";
+import { NavLink,useLocation ,useHistory} from "react-router-dom";
 import {
   Row,
   Col,
@@ -6,20 +6,25 @@ import {
   ToggleButton,
   Container,
   Offcanvas,
+  Tooltip,
+  OverlayTrigger,
 } from "react-bootstrap";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import Logout from "../component/userAuth/Logout";
-
+import Notification from "../component/userInterface/Notification";
+import Header from "./Header";
 import MailRoutes from "../component/userInterface/MailRoutes";
+import WelcomeLand from "./WelcomeLand";
+
 
 const Sidebar = () => {
-  const history = useHistory();
-
+  const history = useHistory()
+  const location = useLocation()
   const [show, setShow] = useState(false);
   const mails = useSelector((state) => state.mail.mails);
   const email = useSelector((state) => state.auth.email);
-  const { message } = useSelector((state) => state.auth.notification);
+  const { message, variant } = useSelector((state) => state.auth.notification);
   const filteredMails = mails.filter(
     (mail) => mail.recipient === email && mail.isTrashed === false
   );
@@ -35,11 +40,11 @@ const Sidebar = () => {
   };
 
   const showAboutUS = () => {
-    history.replace("/Sidebar");
-  };
+    history.replace('/Sidebar')
+  }
 
   const handleClose = () => setShow(false);
-  
+  const handleShow = () => setShow(true);
 
   return (
     <Container fluid>
@@ -47,8 +52,7 @@ const Sidebar = () => {
         <Col
           className="d-flex flex-column p-0 pb-4"
           xs="auto"
-          style={{ backgroundColor: "#f0f0f0" }}
-          // style={{ backgroundColor: "#e2e3e5" }}
+          style={{backgroundColor: '#e2e3e5'}}
         >
           <Offcanvas
             className="p-lg-4"
@@ -56,21 +60,15 @@ const Sidebar = () => {
             onHide={handleClose}
             responsive="lg"
           >
-            <Offcanvas.Body className="d-flex flex-column">
-              <div
-                className="text-center"
-                onClick={showAboutUS}
-                style={{ cursor: "pointer" }}
-              >
-                <i
-                  className="bi-envelope-fill fs-1"
-                  style={{ color: "#3498db" }}
-                ></i>
+            
+            <Offcanvas.Body className="d-flex flex-column p-lg-2">
+              <div className="text-center" onClick={showAboutUS} style={{cursor:'pointer'}}>
+                <i className="bi-envelope-fill fs-1" style={{ color: "#3498db" }}></i>
                 <p
-                  className="ps-2 fs-4"
-                  style={{ fontFamily: "Roboto, sans-serif", color: "#3498db" }}
+                  className="ps-2 fs-4 fw-bold"
+                  style={{ fontFamily: "Roboto, sans-serif", color: "#3498db" }}  
                 >
-                  Mail Express
+                  Mail Express 
                 </p>
               </div>
               <div className="text-start mt-5">
@@ -83,7 +81,7 @@ const Sidebar = () => {
                       id="toggle-check"
                       type="checkbox"
                       variant="outline-light"
-                      className="py-2 w-100 border-0 rounded-0"
+                      className="py-2 w-100 border-0 rounded-0 text-start text-dark"
                       onClick={onClickHandler}
                     >
                       <i
@@ -93,15 +91,12 @@ const Sidebar = () => {
                       Compose
                     </ToggleButton>
                   </NavLink>
-                  <NavLink
-                    to="/Sidebar/inbox"
-                    activeClassName="bg-warning rounded-4"
-                  >
+                  <NavLink to="/Sidebar/inbox" activeClassName="bg-warning rounded-4">
                     <ToggleButton
                       id="toggle-check"
                       type="checkbox"
                       variant="outline-secondary"
-                      className="rounded-0 w-100"
+                      className="rounded-0 w-100 text-start border-0 py-2 text-dark"
                       onClick={onClickHandler}
                     >
                       <div className="d-flex">
@@ -115,15 +110,12 @@ const Sidebar = () => {
                       </div>
                     </ToggleButton>
                   </NavLink>
-                  <NavLink
-                    to="/Sidebar/sent"
-                    activeClassName="bg-warning rounded-4"
-                  >
+                  <NavLink to="/Sidebar/sent" activeClassName="bg-warning rounded-4">
                     <ToggleButton
                       id="toggle-check"
                       type="checkbox"
                       variant="outline-secondary"
-                      className="py-2 w-100"
+                      className="py-2 w-100 rounded-0 text-start border-0 text-dark"
                       onClick={onClickHandler}
                     >
                       <i
@@ -134,7 +126,7 @@ const Sidebar = () => {
                     </ToggleButton>
                   </NavLink>
 
-                  <NavLink to="/Sidebar/starred">
+                  <NavLink to="/Sidebar/starred" activeClassName="bg-warning rounded-4">
                     <ToggleButton
                       id="toggle-check"
                       type="checkbox"
@@ -149,12 +141,12 @@ const Sidebar = () => {
                       Starred
                     </ToggleButton>
                   </NavLink>
-                  <NavLink to="/Sidebar/trash">
+                  <NavLink to="/Sidebar/trash" activeClassName="bg-warning rounded-4">
                     <ToggleButton
                       id="toggle-check"
                       type="checkbox"
                       variant="outline-secondary"
-                      className="rounded-0 w-100"
+                      className="rounded-0 w-100 text-start py-2 border-0 text-dark"
                       onClick={onClickHandler}
                     >
                       <i
@@ -170,10 +162,17 @@ const Sidebar = () => {
           </Offcanvas>
           <div className="mt-auto d-none d-lg-block ms-4">
             <p className="mb-0">Logged in as:</p>
-            <p className="mb-2 text-dark fw-bold">
-              {localStorage.getItem("email")}
-            </p>
-
+            <OverlayTrigger
+              placement="right"
+              overlay={<Tooltip id="email-tooltip">{email}</Tooltip>}
+            >
+              <p
+                className="mb-2 text-dark fw-bold text-truncate"
+                style={{ maxWidth: "220px", cursor: "pointer" }}
+              >
+                {email}
+              </p>
+            </OverlayTrigger>
             <Logout />
           </div>
         </Col>
@@ -183,9 +182,15 @@ const Sidebar = () => {
           className="overflow-auto"
         >
           {message && (
-            <div style={{ maxWidth: "20rem" }} className="fixed-bottom"></div>
+            <div
+              style={{ maxWidth: "20rem" }}
+              className="fixed-bottom ms-auto mb-3 me-2"
+            >
+              <Notification message={message} variant={variant} />
+            </div>
           )}
 
+          <Header handleShow={handleShow} />
           <h2
             className="mt-3 mb-2"
             style={{
@@ -195,7 +200,9 @@ const Sidebar = () => {
             }}
           >
             Welcome to Mail Express
+            
           </h2>
+           {location.pathname === '/Sidebar' && <WelcomeLand />}
 
           <MailRoutes />
         </Col>
