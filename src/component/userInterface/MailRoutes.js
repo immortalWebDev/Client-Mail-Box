@@ -5,7 +5,7 @@ import Inbox from '../Actions/Inbox'
 import Message from '../Actions/Message'
 import Sent from '../Sent/Sent'
 import Trash from '../Trash/Trash'
-
+import Starred from '../Starred/Starred'
 
 const MailRoutes = () => {
   return (
@@ -21,6 +21,12 @@ const MailRoutes = () => {
       </Route>
       <Route path="/Sidebar/sent" exact>
         <Sent />
+      </Route>
+      <Route path="/Sidebar/starred" exact>
+        <Starred />
+      </Route>
+      <Route path="/Sidebar/starred/:messageId">
+        <Message />
       </Route>
       <Route path="/Sidebar/sent/:messageId">
         <Message />
