@@ -19,7 +19,7 @@ const Header = ({ handleShow }) => {
           </i>{" "}
         </span>
         <span className="text-end pe-2">
-          <p className="mb-0 ">Logged in as:</p>
+          <p className="mb-0 text-dark fw-bold">{email} | <Logout /></p>
         </span>
       </div>
     </header>
