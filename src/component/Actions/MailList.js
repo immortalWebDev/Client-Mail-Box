@@ -2,7 +2,9 @@ import { ListGroup, Row, Col, Form } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
 import { setIsChecked, setRead} from "../../store/mailSlice";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
+import { useState } from "react";
+import useFetch from "../../hooks/useFetch";
+import DOMPurify from "dompurify";
 
 const MailList = (props) => {
   const { mail } = props;
@@ -10,26 +12,48 @@ const MailList = (props) => {
   const senderMail = email.replace(/[.]/g, "");
   const location = useLocation();
   const dispatch = useDispatch();
+  const { fetchData } = useFetch();
 
-  const fetchData = async (url, method, data = null, onSuccess) => {
-    try {
-      const response = await axios({
-        method: method,
-        url: url,
-        data: data,
-      });
+  const onCheckHandler = () => {
+    // console.log('single check')
+    dispatch(setIsChecked({ id: mail.id, selector: "single" }));
+  };
 
-      if (onSuccess) {
-        onSuccess(response);
-      }
-    } catch (error) {
-      const { data } = error.response;
-      console.log(data.error.message);
-    }
+  const [isHovered, setIsHovered] = useState(false);
+  const [starHovered, setStarHovered] = useState(false);
+
+  const starMouseEnter = () => {
+    setStarHovered(true);
+  };
+  const starMouseLeave = () => {
+    setStarHovered(false);
+  };
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
+
+  const url =
+    mail.sender === email
+      ? `https://mail-box-piyush-default-rtdb.firebaseio.com/sent-emails/${senderMail}/${mail.id}.json`
+      : `https://mail-box-piyush-default-rtdb.firebaseio.com/emails/${mail.id}.json`;
+
+  const starClickHandler = (event) => {
+    event.stopPropagation();
+    event.preventDefault();
+    dispatch(toggleStarred({ id: mail.id }));
+
+    fetchData(url, "PUT", {
+      ...mail,
+      starred: !mail.starred,
+    });
   };
 
   const onClickHandler = () => {
-    dispatch(setIsChecked({ id: null, selector: "NONE" }));
+    dispatch(setIsChecked({ id: null, selector: "none" }));
 
     const onSuccess = (response) => {
       if (response.status === 200) {
@@ -39,9 +63,7 @@ const MailList = (props) => {
 
     if (!mail.isRead) {
       fetchData(
-        mail.sender === email
-          ? `https://mail-box-piyush-default-rtdb.firebaseio.com/sent-emails/${senderMail}/${mail.id}.json`
-          : `https://mail-box-piyush-default-rtdb.firebaseio.com/emails/${mail.id}.json`,
+        url,
         "PUT",
         {
           ...mail,
@@ -86,7 +108,13 @@ const MailList = (props) => {
         <Col lg="8" className="pt-1 pt-lg-0">
           <div className="ps-3">
             <span className="fw-bold">{mail.subject}</span>
-            <span>{mail.emailContent.substring(0, 100)}...</span>
+            <span
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(
+                  `${mail.emailContent.substring(0, 100)}...`
+                ),
+              }}
+            ></span>
           </div>
         </Col>
       </Row>
