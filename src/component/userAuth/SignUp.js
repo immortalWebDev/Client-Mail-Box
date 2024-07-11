@@ -1,7 +1,14 @@
-import { Form, Button, Container, Row, Col } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import {
+  Form,
+  Button,
+  FloatingLabel,
+  Container,
+  Row,
+  Col,
+} from "react-bootstrap";
 import axios from "axios";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { login } from "../../store/authSlice";
 
@@ -9,6 +16,15 @@ const SignUp = () => {
   const [enteredEmail, setEnteredEmail] = useState("");
   const [enteredPassword, setEnteredPassword] = useState("");
   const [enteredConfirmPassword, setEnteredConfirmPassword] = useState("");
+  const [emailTouched, setEmailTouched] = useState(false);
+  const [passwordTouched, setPasswordTouched] = useState(false);
+  const [confirmPasswordTouched, setConfirmPasswordTouched] = useState(false);
+
+  const isLoading = useSelector((state) => state.auth.isLoading);
+  const apiKey = useSelector((state) => state.auth.apiKey);
+  const { message, variant } = useSelector((state) => state.auth.notification);
+
+  const dispatch = useDispatch();
   const [signIn, setSignIn] = useState(true);
   const [isLoading, setIsLoading] = useState(false); 
 
@@ -108,8 +124,16 @@ const SignUp = () => {
                   value={enteredEmail}
                   required
                 />
-              </Form.Group>
-              <Form.Group className="mb-3">
+                {emailHasError && (
+                  <p className="text-danger">Please enter a valid Email</p>
+                )}
+              </FloatingLabel>
+
+              <FloatingLabel
+                className="mb-3"
+                controlId="floatingPassword"
+                label="Enter password"
+              >
                 <Form.Control
                   type="password"
                   placeholder="Enter password"
@@ -119,17 +143,37 @@ const SignUp = () => {
                 />
               </Form.Group>
               {!signIn && (
-                <Form.Group className="mb-3">
+                <FloatingLabel
+                  controlId="floatingConfirmPassword"
+                  label="Confirm password"
+                >
                   <Form.Control
+                    className={`border-0 border-bottom ${
+                      confirmPasswordHasError ? "border-danger" : ""
+                    } rounded-1`}
                     type="password"
                     placeholder="Confirm password"
                     onChange={confirmPasswordInputHandler}
+                    onBlur={confirmPasswordBlurHandler}
                     value={enteredConfirmPassword}
                     required
                   />
-                </Form.Group>
+                  {confirmPasswordHasError && (
+                    <p className="text-danger">
+                      Your passwords do not match, Try again
+                    </p>
+                  )}
+                </FloatingLabel>
               )}
               <div className="text-center mt-4">
+                {signIn ? (
+                  <Button
+                    type="submit"
+                    className={`w-100 mt-2 rounded-3 border-2 text-white fw-bold`}
+                  >
+                    {isLoading ? "Logging in..." : "Login"}
+                  </Button>
+                ) : (
                 <Button
                   type="submit"
                   className="w-100 mt-2 rounded-3 border-2 text-white fw-bold"
@@ -138,6 +182,18 @@ const SignUp = () => {
                 </Button>
               </div>
               <div className="pt-3 text-center">
+                <span>
+                  {!signIn ? (
+                    <>
+                      Continue with existing account{" "}
+                      <i className="bi bi-arrow-bar-right"></i>
+                    </>
+                  ) : (
+                    <>
+                      Click to create a new account{" "}
+                      <i className="bi bi-arrow-bar-right"></i>
+                    </>
+                  )}{" "}
                 <span
                   onClick={onClickHandler}
                   className="text-primary"
