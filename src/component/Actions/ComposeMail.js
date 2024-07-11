@@ -3,7 +3,9 @@ import { Editor } from "react-draft-wysiwyg";
 import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { Form, Button, InputGroup } from "react-bootstrap";
 import { useRef, useState } from "react";
-import { EditorState } from "draft-js";
+import { EditorState, convertToRaw } from "draft-js";
+import draftToHtml from "draftjs-to-html";
+
 import { useSelector, useDispatch } from "react-redux";
 import { addToInbox } from "../../store/mailSlice";
 
@@ -24,13 +26,22 @@ const ComposeMail = () => {
 
     const to = toRef.current.value;
     const mailSubject = subjectRef.current.value;
-    const editorContent = editorState.getCurrentContent().getPlainText();
+
+    const editorContent = draftToHtml(
+      convertToRaw(editorState.getCurrentContent())
+    );
+
+    const timestamp = new Date().getTime();
 
     const emailInfo = {
       recipient: to,
       subject: mailSubject,
       emailContent: editorContent,
       sender: senderEmail,
+      isRead: false,
+      isTrashed: false,
+      starred: false,
+      timestamp: timestamp,
     };
 
     try {
