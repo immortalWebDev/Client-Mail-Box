@@ -1,5 +1,5 @@
-
 import { useEffect } from "react";
+import DropdownMenu from "../Actions/DropdownMenu";
 import { Button, ListGroup } from "react-bootstrap";
 import LoadingSpinner from "../userInterface/LoadingSpinner";
 import MailList from "../Actions/MailList";
@@ -22,21 +22,21 @@ const Starred = () => {
   const onDeleteHandler = async () => {
     try {
       const updatedPromises = starredMails
-  .filter((mail) => mail.isChecked)
-  .map((mail) => {
-    let url;
-    if (mail.sender === email) {
-      url = `${url2}/${mail.id}.json`;
-    } else {
-      url = `${url1}/${mail.id}.json`;
-    }
-    
-    return axios.put(url, {
-      ...mail,
-      isChecked: false,
-      isTrashed: true,
-    });
-  });
+        .filter((mail) => mail.isChecked)
+        .map((mail) => {
+          let url;
+          if (mail.sender === email) {
+            url = `${url2}/${mail.id}.json`;
+          } else {
+            url = `${url1}/${mail.id}.json`;
+          }
+
+          return axios.put(url, {
+            ...mail,
+            isChecked: false,
+            isTrashed: true,
+          });
+        });
 
       await Promise.all(updatedPromises);
       dispatch(moveFromStarred("toTrash"));
@@ -60,12 +60,12 @@ const Starred = () => {
 
   return (
     <>
-      <div className="border-bottom d-flex align-items-center">
-        
+      <div className="border-bottom d-flex align-items-center py-2 px-1 mt-5 mt-lg-0">
+        <DropdownMenu filteredMails={starredMails} />
         <div className="ms-auto">
           <Button
             variant="primary"
-            className="px-2"
+            className="px-2 border-2"
             disabled={!isDeleteEnabled}
             onClick={onDeleteHandler}
           >
@@ -78,11 +78,12 @@ const Starred = () => {
           <LoadingSpinner />
         </div>
       ) : starredMails.length === 0 ? (
-        <p className="text-center">
-          No starred nails
+        <p className="text-center mt-4 fw-bold fs-7">
+          No starred messages yet! Star important messages to keep them handy.
+          Start marking your favorites with Mail Express
         </p>
       ) : (
-        <ListGroup>
+        <ListGroup variant="flush">
           {starredMails.map((mail) => (
             <MailList mail={mail} key={mail.id} />
           ))}
