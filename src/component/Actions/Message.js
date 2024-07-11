@@ -5,24 +5,25 @@ import LoadingSpinner from "../userInterface/LoadingSpinner";
 import { moveToTrash, deleteForever } from "../../store/mailSlice";
 import { showNotification } from "../../store/authSlice";
 import useFetch from "../../hooks/useFetch";
+import DOMPurify from "dompurify";
 
 const Message = () => {
   const { messageId } = useParams();
   const location = useLocation();
+  
   const mails = useSelector((state) => state.mail.mails);
   const mail = mails.find((mail) => mail.id === messageId);
   const history = useHistory();
   const email = useSelector((state) => state.auth.email);
   const senderMail = email.replace(/[.]/g, "");
-  const { fetchData } = useFetch();
+  const { fetchData} = useFetch();
   let url;
 
   if (mails.length > 0) {
-    if (mail.sender === email) {
-      url = `https://mail-box-piyush-default-rtdb.firebaseio.com/sent-emails/${senderMail}/${mail.id}.json`;
-    } else {
-      url = `https://mail-box-piyush-default-rtdb.firebaseio.com/emails/${mail.id}.json`;
-    }
+    url =
+      mail.sender === email
+        ? `https://mail-box-piyush-default-rtdb.firebaseio.com/sent-emails/${senderMail}/${mail.id}.json`
+        : `https://mail-box-piyush-default-rtdb.firebaseio.com/emails/${mail.id}.json`;
   }
 
   const moveToTrashHandler = () => {
@@ -32,6 +33,8 @@ const Message = () => {
         dispatch(
           showNotification({ message: "Moved to trash!", variant: "success" })
         );
+
+        //using if else
         if (location.pathname === `/Sidebar/inbox/${mail.id}`) {
           history.replace("/Sidebar/inbox");
         } else if (location.pathname === `/Sidebar/trash/${mail.id}`) {
@@ -41,6 +44,7 @@ const Message = () => {
         } else {
           history.replace("/Sidebar/starred");
         }
+        
       }
     };
 
@@ -73,17 +77,17 @@ const Message = () => {
   };
 
   const onBackHandler = () => {
-    if (location.pathname === `/Sidebar/inbox/${mail.id}`) {
-      history.replace("/Sidebar/inbox");
-    } else if (location.pathname === `/Sidebar/trash/${mail.id}`) {
-      history.replace("/Sidebar/trash");
-    } else if (location.pathname === `/Sidebar/sent/${mail.id}`) {
-      history.replace("/Sidebar/sent");
-    } else {
-      history.replace("/Sidebar/starred");
-    }
+    history.replace(
+      //using ternary
+      location.pathname === `/Sidebar/inbox/${mail.id}`
+        ? "/Sidebar/inbox"
+        : location.pathname === `/Sidebar/trash/${mail.id}`
+        ? "/Sidebar/trash"
+        : location.pathname === `/Sidebar/sent/${mail.id}`
+        ? "/Sidebar/sent"
+        : "/Sidebar/starred"
+    );
   };
-
   const dispatch = useDispatch();
   if (mails.length === 0) {
     return (
@@ -97,29 +101,35 @@ const Message = () => {
 
   return (
     <>
-      <div className="border-bottom py-2 px-1 d-flex">
-        <p className="m-0" onClick={onBackHandler}>
-          <i></i>
+      <div className="border-bottom py-2 px-1 d-flex align-items-center mt-5 mt-lg-0">
+        <p
+          className="m-0"
+          onClick={onBackHandler}
+          style={{ cursor: "pointer" }}
+        >
+          <i className="bi bi-chevron-double-left pe-2"></i>
           <span>Go back</span>
         </p>
 
         {location.pathname !== `/Sidebar/trash/${messageId}` ? (
           <Button
+            variant="primary"
             className="px-2 border-0 ms-auto"
             onClick={moveToTrashHandler}
           >
             <p className="mx-auto p-0 m-0">
-              <i className="bi text-warning"></i>
+              <i className="bi text-warning pe-2 bi-trash"></i>
               <span>Delete</span>
             </p>
           </Button>
         ) : (
           <Button
+            variant="danger"
             className="px-2 border-0 ms-auto"
             onClick={deleteForeverHandler}
           >
             <p className="mx-auto p-0 m-0">
-              <i></i>
+              <i className="bi text-warning pe-2 bi-trash"></i>
               <span>Delete Forever</span>
             </p>
           </Button>
@@ -127,18 +137,27 @@ const Message = () => {
       </div>
       <div style={{ maxHeight: "80vh" }} className="overflow-auto">
         <div className="pt-3">
-          <span>From: </span>
+          <span className="fw-bold">From: </span>
           <span>{mail.sender}</span>
         </div>
         <div>
-          <span >To: </span>
-          <span>{`(${mail.recipient})`}</span>
-          <p className="pt-2">Subject: {mail.subject}</p>
+          <span className="fw-bold">To: </span>
+          <span>{`(${mail.recipient})`} </span>
+          <p className="fw-bold pt-2">Subject: {mail.subject}</p>
+          <span className="fw-bold">Date & Time:</span>{" "}
+          {mail.timestamp
+            ? new Date(mail.timestamp).toLocaleString()
+            : "Not Available"}
         </div>
 
         <hr />
         <div className="mt-3">
-          <div>{mail.emailContent.substring(0, 100)}</div>
+          <span className="text-dark fw-bold">Matter of Mail:</span>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(mail.emailContent),
+            }}
+          ></div>
         </div>
       </div>
     </>
