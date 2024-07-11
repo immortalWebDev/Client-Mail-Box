@@ -5,6 +5,11 @@ const initialAuthState = {
   idToken: localStorage.getItem("idToken"),
   email: localStorage.getItem("email"),
   apiKey: "AIzaSyBtiN7vadJTitonU3zCdeZ1hv2HuGIZ-ts",
+  isLoading: false,
+  notification: {
+    message: null,
+    variant: null,
+  },
 };
 
 const authSlice = createSlice({
@@ -28,9 +33,18 @@ const authSlice = createSlice({
       state.idToken = "";
       state.email = "";
     },
+    showNotification: (state, action) => {
+      state.notification = {
+        message: action.payload.message,
+        variant: action.payload.variant,
+      };
+    },
+    setIsLoading: (state, action) => {
+      state.isLoading = action.payload;
+    },
   },
 });
 
-export const { signUp, login, logout} =
+export const { signUp, login, logout, showNotification, setIsLoading } =
   authSlice.actions;
 export default authSlice.reducer;
