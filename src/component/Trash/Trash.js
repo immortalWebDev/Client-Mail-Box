@@ -1,17 +1,27 @@
 import { Button, ListGroup } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
-import MailList from "../Mailbox/MailList";
-import { emptyTrash } from "../../store/mailSlice";
-import axios from "axios";
+import MailList from "../Actions/MailList";
+import DropdownMenu from "../Actions/DropdownMenu";
+import ConfirmationModal from "./ConfirmationModal";
+import { moveFromInbox, moveFromSent,emptyTrash,setIsChecked } from "../../store/mailSlice";
+import { showNotification } from "../../store/authSlice";
+import LoadingSpinner from "../userInterface/LoadingSpinner";
+
 
 const Trash = () => {
   const mails = useSelector((state) => state.mail.mails);
   const email = useSelector((state) => state.auth.email);
+
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   
   const senderMail = email.replace(/[.]/g, "");
   const dispatch = useDispatch();
 
   const filteredMails = mails.filter((mail) => mail.isTrashed);
+
+  const isDeleteEnabled = filteredMails.some((item) => item.isChecked);
 
   const url1 = `https://mail-box-piyush-default-rtdb.firebaseio.com/emails`;
   const url2 = `https://mail-box-piyush-default-rtdb.firebaseio.com/sent-emails/${senderMail}`;
@@ -28,6 +38,13 @@ const Trash = () => {
       );
       await Promise.all(updatedPromises);
       dispatch(emptyTrash());
+      setShow(false);
+      dispatch(
+        showNotification({
+          message: "Trash is cleared",
+          variant: "success",
+        })
+      );
     } catch (error) {
       const { data } = error.response;
       console.log(data.error.message);
@@ -36,7 +53,17 @@ const Trash = () => {
 
   return (
     <>
-      <div>
+      {
+        <ConfirmationModal
+          handleClose={handleClose}
+          show={show}
+          emptyTrashHandler={emptyTrashHandler}
+        />
+      }
+
+      <div className="border-bottom d-flex align-items-center py-2 px-1 mt-5 mt-lg-0">
+        <DropdownMenu filteredMails={filteredMails} />
+        <div className="ms-auto">
         <Button
           disabled={filteredMails.length === 0}
           onClick={emptyTrashHandler}
