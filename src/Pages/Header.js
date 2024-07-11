@@ -1,8 +1,10 @@
 import React from "react";
 import Logout from "../component/userAuth/Logout";
+import { useSelector } from "react-redux";
 
 const Header = ({ handleShow }) => {
-  const email = localStorage.getItem("email");
+  // const email = localStorage.getItem("email");
+  const email = useSelector((state) => state.auth.email);
 
   return (
     <header>
@@ -19,6 +21,7 @@ const Header = ({ handleShow }) => {
           </i>{" "}
         </span>
         <span className="text-end pe-2">
+          {/* <p className="mb-0 ">Logged in as:</p> */}
           <p className="mb-0 text-dark fw-bold">{email} | <Logout /></p>
         </span>
       </div>
