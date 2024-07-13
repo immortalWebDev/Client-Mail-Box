@@ -96,16 +96,21 @@ const ComposeMail = () => {
 
   return (
     <>
-      <Form onSubmit={onSubmitHandler} className="p-3 mt-4">
+      <Form onSubmit={onSubmitHandler} className="p-3 mt-4 mt-lg-0">
         <InputGroup className="mb-3">
           <InputGroup.Text id="basic-addon1">To</InputGroup.Text>
-          <Form.Control type="email" placeholder="Email" ref={toRef} required />
+          <Form.Control
+            type="email"
+            placeholder="Enter receivers Email id"
+            ref={toRef}
+            required
+          />
         </InputGroup>
         <InputGroup className="mb-3">
           <InputGroup.Text id="basic-addon2">Subject</InputGroup.Text>
           <Form.Control
             type="text"
-            placeholder="Sub"
+            placeholder="Enter the topic of your mail"
             ref={subjectRef}
             required
           />
@@ -116,11 +121,14 @@ const ComposeMail = () => {
             toolbarClassName="py-3 border-bottom bg-light"
             wrapperClassName="card"
             editorClassName="card-body pt-0"
+            editorStyle={{ minHeight: "15rem" }}
             onEditorStateChange={handleEditorStateChange}
           />
         </Form.Group>
         <div>
-          <Button type="submit">Send</Button>
+          <Button type="submit" className="rounded-1 px-4">
+            {isLoading ? "Sending..." : "Send"}
+          </Button>
         </div>
       </Form>
     </>
