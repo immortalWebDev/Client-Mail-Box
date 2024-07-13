@@ -1,4 +1,3 @@
-import axios from "axios";
 import { Editor } from "react-draft-wysiwyg";
 import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { Form, Button, InputGroup } from "react-bootstrap";
@@ -30,6 +29,7 @@ const ComposeMail = () => {
     e.preventDefault();
 
     const to = toRef.current.value;
+
     const mailSubject = subjectRef.current.value;
 
     const editorContent = draftToHtml(
@@ -50,35 +50,35 @@ const ComposeMail = () => {
     };
 
     if (emailInfo.recipient !== emailInfo.sender) {
-    try {
-      const url1 =
-        "https://mail-box-piyush-default-rtdb.firebaseio.com/emails.json";
-      const url2 = `https://mail-box-piyush-default-rtdb.firebaseio.com/sent-emails/${email}.json`;
+      try {
+        const url1 =
+          "https://mail-box-piyush-default-rtdb.firebaseio.com/emails.json";
+        const url2 = `https://mail-box-piyush-default-rtdb.firebaseio.com/sent-emails/${email}.json`;
 
-      const requests = [
-        axios.post(url1, emailInfo),
-        axios.post(url2, emailInfo),
-      ];
+        const requests = [
+          axios.post(url1, emailInfo),
+          axios.post(url2, emailInfo),
+        ];
 
-      const responses = await Promise.all(requests);
-      const [response1, response2] = responses;
-      const { status: status1 } = response1;
-      const { data, status: status2 } = response2;
+        const responses = await Promise.all(requests);
+        const [response1, response2] = responses;
+        const { status: status1 } = response1;
+        const { data, status: status2 } = response2;
 
-      if (status1 === 200 && status2 === 200) {
-        const mailItem = {
-          id: data.name,
-          isChecked: false,
-          ...emailInfo,
-        };
+        if (status1 === 200 && status2 === 200) {
+          const mailItem = {
+            id: data.name,
+            isChecked: false,
+            ...emailInfo,
+          };
 
-        dispatch(addToInbox([mailItem]));
+          dispatch(addToInbox([mailItem]));
           dispatch(
             showNotification({ message: "Email Sent", variant: "success" })
           );
-      }
-    } catch (error) {
-      console.error(error.message);
+        }
+      } catch (error) {
+        console.error(error.message);
         dispatch(
           showNotification({
             message: "Failed to send, Try again later",
