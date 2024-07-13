@@ -7,6 +7,8 @@ import { EditorState, convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 
 import { useSelector, useDispatch } from "react-redux";
+import { showNotification } from "../../store/authSlice";
+import axios from "axios";
 import { addToInbox } from "../../store/mailSlice";
 
 const ComposeMail = () => {
@@ -16,12 +18,15 @@ const ComposeMail = () => {
   const email = senderEmail.replace(/[.]/g, "");
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const dispatch = useDispatch();
   const handleEditorStateChange = (newEditorState) => {
     setEditorState(newEditorState);
   };
 
   const onSubmitHandler = async (e) => {
+    setIsLoading(true);
     e.preventDefault();
 
     const to = toRef.current.value;
@@ -67,6 +72,9 @@ const ComposeMail = () => {
         };
 
         dispatch(addToInbox([mailItem]));
+          dispatch(
+            showNotification({ message: "Email Sent", variant: "success" })
+          );
       }
     } catch (error) {
       console.error(error.message);
