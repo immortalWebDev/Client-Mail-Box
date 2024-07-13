@@ -49,6 +49,7 @@ const ComposeMail = () => {
       timestamp: timestamp,
     };
 
+    if (emailInfo.recipient !== emailInfo.sender) {
     try {
       const url1 =
         "https://mail-box-piyush-default-rtdb.firebaseio.com/emails.json";
@@ -78,6 +79,18 @@ const ComposeMail = () => {
       }
     } catch (error) {
       console.error(error.message);
+        dispatch(
+          showNotification({
+            message: "Failed to send, Try again later",
+            variant: "danger",
+          })
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      alert("The address you are sending email to is currently logged in!");
+      setIsLoading(false);
     }
   };
 
