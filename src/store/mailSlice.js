@@ -17,37 +17,49 @@ const mailSlice = createSlice({
 
       if (selector === "single") {
         const mailItem = state.mails.find((item) => item.id === id);
+        console.log(mailItem);
+
+        if (mailItem) {
         mailItem.isChecked = !mailItem.isChecked;
-      } else if (selector === "all") {
+        }
+      } else if (selector === "MAIN-ALL") {
         const checked = state.mails.some((item) => item.isChecked === false);
-        console.log(checked);
         state.mails = state.mails.map((mail) => {
           return {
             ...mail,
             isChecked: checked ? true : false,
           };
         });
-      } else if (selector === "allMark" || selector === "none") {
-        state.mails = state.mails.map((mail) => {
-          return {
+      } else if (selector === "DROPDOWN-ALL") {
+        state.mails = state.mails.map((mail) => ({
+          ...mail,
+          isChecked: true,
+        }));
+      } else if (selector === "none") {
+        state.mails = state.mails.map((mail) => ({
+          ...mail,
+          isChecked: false,
+        }));
+      } else if (selector === "read") {
+        state.mails = state.mails.map((mail) => ({
+          ...mail,
+          isChecked: mail.isRead === true,
+        }));
+      } else if (selector === "unread") {
+        state.mails = state.mails.map((mail) => ({
             ...mail,
-            isChecked: selector === "allMark",
-          };
-        });
-      } else if (selector === "read" || selector === "unread") {
-        state.mails = state.mails.map((mail) => {
-          return {
+          isChecked: mail.isRead === false,
+        }));
+      } else if (selector === "starred") {
+        state.mails = state.mails.map((mail) => ({
             ...mail,
-            isChecked: mail.isRead === (selector === "read"),
-          };
-        });
-      } else if (selector === "starred" || selector === "unstarred") {
-        state.mails = state.mails.map((mail) => {
-          return {
+          isChecked: mail.starred === true,
+        }));
+      } else if (selector === "UNSTARRED") {
+        state.mails = state.mails.map((mail) => ({
             ...mail,
-            isChecked: mail.starred === (selector === "starred"),
-          };
-        });
+          isChecked: mail.starred === false,
+        }));
       }
     },
 
