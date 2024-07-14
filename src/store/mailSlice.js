@@ -95,7 +95,28 @@ const mailSlice = createSlice({
         return mail;
       });
     },
-
+    moveFromStarred: (state, action) => {
+      state.mails = state.mails.map((mail) => {
+        if (mail.isChecked && mail.starred === true) {
+          return {
+            ...mail,
+            isTrashed: action.payload === "toTrash",
+          };
+        }
+        return mail;
+      });
+    },
+    moveToTrash: (state, action) => {
+      state.mails = state.mails.map((mail) => {
+        if (mail.id === action.payload) {
+          return {
+            ...mail,
+            isTrashed: true,
+          };
+        }
+        return mail;
+      });
+    },
     setRead: (state, action) => {
       const { id } = action.payload;
       const mailItem = state.mails.find((mail) => mail.id === id);
