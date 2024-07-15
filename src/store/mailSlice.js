@@ -122,7 +122,22 @@ const mailSlice = createSlice({
       const mailItem = state.mails.find((mail) => mail.id === id);
       mailItem.isRead = true;
     },
+    toggleStarred: (state, action) => {
+      const { id } = action.payload;
+      const mailItem = state.mails.find((mail) => mail.id === id);
+      mailItem.starred = !mailItem.starred;
+    },
+    clearInbox: (state) => {
+      state.mails = [];
+    },
+    setMailsLoading: (state, action) => {
+      state.isLoading = action.payload;
+    },
 
+    deleteForever: (state, action) => {
+      const { id } = action.payload;
+      state.mails = state.mails.filter((mail) => mail.id !== id);
+    },
     emptyTrash: (state) => {
       state.mails = state.mails.filter((mail) => mail.isTrashed === false);
     },
