@@ -12,6 +12,7 @@ const mailSlice = createSlice({
     addToInbox: (state, action) => {
       state.mails.push(...action.payload);
     },
+
     setIsChecked: (state, action) => {
       const { id, selector } = action.payload;
 
@@ -62,7 +63,6 @@ const mailSlice = createSlice({
         }));
       }
     },
-
     moveFromInbox: (state, action) => {
       const { move, email } = action.payload;
       state.mails = state.mails.map((mail) => {
@@ -144,6 +144,18 @@ const mailSlice = createSlice({
   },
 });
 
-export const { addToInbox, moveFromInbox, moveFromSent, setRead, emptyTrash } =
-  mailSlice.actions;
+export const {
+  addToInbox,
+  setIsChecked,
+  moveFromInbox,
+  moveFromSent,
+  setRead,
+  clearInbox,
+  setMailsLoading,
+  moveToTrash,
+  toggleStarred,
+  deleteForever,
+  emptyTrash,
+  moveFromStarred,
+} = mailSlice.actions;
 export default mailSlice.reducer;
