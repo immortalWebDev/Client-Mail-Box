@@ -21,7 +21,7 @@ const mailSlice = createSlice({
         console.log(mailItem);
 
         if (mailItem) {
-        mailItem.isChecked = !mailItem.isChecked;
+          mailItem.isChecked = !mailItem.isChecked;
         }
       } else if (selector === "MAIN-ALL") {
         const checked = state.mails.some((item) => item.isChecked === false);
@@ -48,17 +48,17 @@ const mailSlice = createSlice({
         }));
       } else if (selector === "unread") {
         state.mails = state.mails.map((mail) => ({
-            ...mail,
+          ...mail,
           isChecked: mail.isRead === false,
         }));
       } else if (selector === "starred") {
         state.mails = state.mails.map((mail) => ({
-            ...mail,
+          ...mail,
           isChecked: mail.starred === true,
         }));
       } else if (selector === "UNSTARRED") {
         state.mails = state.mails.map((mail) => ({
-            ...mail,
+          ...mail,
           isChecked: mail.starred === false,
         }));
       }
