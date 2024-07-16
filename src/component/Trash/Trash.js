@@ -26,6 +26,36 @@ const Trash = () => {
   const url1 = `https://mail-box-piyush-default-rtdb.firebaseio.com/emails`;
   const url2 = `https://mail-box-piyush-default-rtdb.firebaseio.com/sent-emails/${senderMail}`;
 
+  const onRestoreHandler = async () => {
+    try {
+      const updatedPromises = filteredMails
+        .filter((mail) => mail.isChecked)
+        .map((mail) =>
+          axios.put(
+            mail.sender === email
+              ? `${url2}/${mail.id}.json`
+              : `${url1}/${mail.id}.json`,
+            {
+              ...mail,
+              isChecked: false,
+              isTrashed: false,
+            }
+          )
+        );
+
+      await Promise.all(updatedPromises);
+      dispatch(
+        showNotification({
+          message: "Restored! ",
+          variant: "success",
+        })
+      );
+      dispatch(moveFromInbox({ move: "toInbox", email: email }));
+      dispatch(moveFromSent({ move: "toSentbox", email: email }));
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   const emptyTrashHandler = async () => {
     try {
