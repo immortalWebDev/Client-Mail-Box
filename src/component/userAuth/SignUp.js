@@ -203,12 +203,13 @@ const SignUp = () => {
                     {isLoading ? "Logging in..." : "Login"}
                   </Button>
                 ) : (
-                <Button
-                  type="submit"
-                  className="w-100 mt-2 rounded-3 border-2 text-white fw-bold"
-                >
-                  {isLoading ? (signIn ? "Logging in..." : "Signing up...") : (signIn ? "Login" : "Sign Up")}
-                </Button>
+                  <Button
+                    type="submit"
+                    className={`w-100 mt-2 rounded-3 border-2 text-white fw-bold`}
+                  >
+                    {isLoading ? "Signing up..." : "Sign Up"}
+                  </Button>
+                )}
               </div>
               <div className="pt-3 text-center">
                 <span>
