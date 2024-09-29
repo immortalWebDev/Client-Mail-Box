@@ -115,17 +115,29 @@ const SignUp = () => {
     <>
       <Container fluid>
         <Row className="min-vh-100 align-items-center">
+          {message && (
+            <div className="fixed-top p-0">
+              {" "}
+              <Notification message={message} variant={variant} />{" "}
+            </div>
+          )}
+          <Col md={6} className="d-none d-md-block ml-5" style={{ paddingLeft: "70px" }}>
+            <img src="/Mail-Express.jpg" alt="Email" className="img-fluid" />
+          </Col>
           <Col md={6}>
             <div className="text-center pb-4">
               <h3>
                 {signIn ? (
                   <>
-                    Login to <span className="text-primary">Mail Express</span>
+                    Start your{" "}
+                    <i className="text-primary bi-envelope-open-heart"> </i>{" "}
+                    with{" "}
+                    <i className="text-primary fw-bold">
+                      Mail Express <i className="bi-envelope me-2"></i>
+                    </i>
                   </>
                 ) : (
-                  <>
-                    Sign Up for <span className="text-primary">Mail Express</span>
-                  </>
+                  <span>Heyy glad to <i className="text-primary fw-bold">see you</i> again <i className="bi bi-emoji-smile text-primary"></i></span>
                 )}
               </h3>
             </div>
