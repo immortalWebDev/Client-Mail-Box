@@ -224,12 +224,14 @@ const SignUp = () => {
                       <i className="bi bi-arrow-bar-right"></i>
                     </>
                   )}{" "}
-                <span
-                  onClick={onClickHandler}
-                  className="text-primary"
-                  style={{ cursor: "pointer" }}
-                >
-                  {signIn ? "Create an account" : "Back to login"}
+                  <span
+                    onClick={onClickHandler}
+                    className="text-primary"
+                    style={{ cursor: "pointer" }}
+                  >
+                    {" "}
+                    {!signIn ? "Login" : "Sign Up"}
+                  </span>{" "}
                 </span>
               </div>
             </Form>
