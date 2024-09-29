@@ -127,7 +127,7 @@ const SignUp = () => {
           <Col md={6}>
             <div className="text-center pb-4">
               <h3>
-                {signIn ? (
+                {!signIn ? (
                   <>
                     Start your{" "}
                     <i className="text-primary bi-envelope-open-heart"> </i>{" "}
