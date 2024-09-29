@@ -94,9 +94,22 @@ const SignUp = () => {
     setEnteredPassword(event.target.value);
   };
 
+  const passwordBlurHandler = () => {
+    setPasswordTouched(true);
+  };
+
+  const passwordHasError = enteredPassword.length < 8 && passwordTouched;
+
   const confirmPasswordInputHandler = (event) => {
     setEnteredConfirmPassword(event.target.value);
   };
+
+  const confirmPasswordBlurHandler = () => {
+    setConfirmPasswordTouched(true);
+  };
+
+  const confirmPasswordHasError =
+    enteredConfirmPassword !== enteredPassword && confirmPasswordTouched;
 
   return (
     <>
