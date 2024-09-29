@@ -11,6 +11,9 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { login } from "../../store/authSlice";
+import { showNotification } from "../../store/authSlice";
+import { setIsLoading } from "../../store/authSlice";
+import Notification from "../userInterface/Notification";
 
 const SignUp = () => {
   const [enteredEmail, setEnteredEmail] = useState("");
@@ -42,34 +45,29 @@ const SignUp = () => {
   const onSubmitHandler = async (event) => {
     try {
       event.preventDefault();
-      
-      if (signIn) {
-        
-        setIsLoading(true);
-        const response = await axios.post(endPointUrl, {
-          email: enteredEmail,
-          password: enteredPassword,
-          returnSecureToken: true,
-        });
-        const data = response.data;
-        loginHandler(data);
-      } else {
-        
-        if (enteredPassword !== enteredConfirmPassword) {
-          // Passwords don't match
-          return;
+      if (
+        !signIn &&
+        (emailHasError || passwordHasError || confirmPasswordHasError)
+      )
+        return;
+      if (emailHasError || passwordHasError) return;
+      dispatch(setIsLoading(true));
+
+      const response = await axios.post(endPointUrl, {
+        email: enteredEmail,
+        password: enteredPassword,
+        returnSecureToken: true,
+      });
+      const data = response.data;
+      if (response.status === 200) {
+        if (signIn) {
+          dispatch(login({ idToken: data.idToken, email: data.email }));
+          history.replace("/Sidebar");
+        } else {
+          const message =
+            "Hey Welcome! Your account is created successfully, Login to proceed!";
+          dispatch(showNotification({ message: message, variant: "success" }));
         }
-        setIsLoading(true);
-        const response = await axios.post(endPointUrl, {
-          email: enteredEmail,
-          password: enteredPassword,
-          returnSecureToken: true,
-        });
-        const message =
-          "Hey Welcome! Your account is created successfully, Login to proceed!";
-        alert(message); 
-        setIsLoading(false);
-        setSignIn(true); 
       }
     } catch (error) {
       alert("Error occurred. Please try again."); 
