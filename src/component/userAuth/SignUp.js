@@ -84,6 +84,12 @@ const SignUp = () => {
     setEnteredEmail(event.target.value);
   };
 
+  const emailBlurHandler = () => {
+    setEmailTouched(true);
+  };
+
+  const emailHasError = !enteredEmail.includes("@") && emailTouched;
+
   const passwordInputHandler = (event) => {
     setEnteredPassword(event.target.value);
   };
