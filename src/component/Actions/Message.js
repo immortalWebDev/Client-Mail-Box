@@ -4,19 +4,21 @@ import { Container, Button } from "react-bootstrap";
 import LoadingSpinner from "../userInterface/LoadingSpinner";
 import { moveToTrash, deleteForever } from "../../store/mailSlice";
 import { showNotification } from "../../store/authSlice";
+import DOMPurify from "dompurify";
 import useFetch from "../../hooks/useFetch";
 import DOMPurify from "dompurify";
 
 const Message = () => {
   const { messageId } = useParams();
   const location = useLocation();
-  
+
   const mails = useSelector((state) => state.mail.mails);
   const mail = mails.find((mail) => mail.id === messageId);
   const history = useHistory();
   const email = useSelector((state) => state.auth.email);
   const senderMail = email.replace(/[.]/g, "");
-  const { fetchData} = useFetch();
+  const { fetchData } = useFetch();
+
   let url;
 
   if (mails.length > 0) {
@@ -152,7 +154,8 @@ const Message = () => {
 
         <hr />
         <div className="mt-3">
-          <span className="text-dark fw-bold">Matter of Mail:</span>
+          <p className="text-dark fw-bold text-decoration-underline">Matter of Mail:</p>
+          
           <div
             dangerouslySetInnerHTML={{
               __html: DOMPurify.sanitize(mail.emailContent),
