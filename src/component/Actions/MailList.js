@@ -140,10 +140,16 @@ const MailList = (props) => {
             </div>
 
             <p className="fw-bold ps-2 m-0">
-              <i className={`bi ${mail.isRead ? "invisible" : ""} bi-record-fill text-primary pe-1`}></i>
-              {mail.sender}
+              <i
+                className={`bi ${
+                  mail.isRead || location.pathname === "/Sidebar/sent"
+                    ? "invisible"
+                    : ""
+                } bi-record-fill text-primary pe-1`}
+              ></i>
+              {getMailAddress(mail)}
             </p>
-          </div>
+          </div>{" "}
         </Col>
         <Col lg="8" className="pt-1 pt-lg-0">
           <div className="ps-3">
