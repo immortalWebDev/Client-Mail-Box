@@ -39,8 +39,8 @@ const SignUp = () => {
   };
 
   const endPointUrl = signIn
-    ? `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`
-    : `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${apiKey}`;
+    ? `${process.env.REACT_APP_SINGIN_URL}${apiKey}`
+    : `${process.env.REACT_APP_SINGUP_URL}${apiKey}`;
 
   const onSubmitHandler = async (event) => {
     try {

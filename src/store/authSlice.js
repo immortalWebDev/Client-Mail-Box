@@ -4,7 +4,7 @@ const initialAuthState = {
   isAuthenticated: localStorage.getItem("isAuthenticated"),
   idToken: localStorage.getItem("idToken"),
   email: localStorage.getItem("email"),
-  apiKey: "AIzaSyBtiN7vadJTitonU3zCdeZ1hv2HuGIZ-ts",
+  apiKey: process.env.REACT_APP_FIREBASE_API,
   isLoading: false,
   notification: {
     message: null,

@@ -16,8 +16,9 @@ const Starred = () => {
   const senderMail = email.replace(/[.]/g, "");
   const starredMails = mails.filter((mail) => mail.starred && !mail.isTrashed);
   const isDeleteEnabled = starredMails.some((mail) => mail.isChecked);
-  const url1 = `https://mail-box-piyush-default-rtdb.firebaseio.com/emails`;
-  const url2 = `https://mail-box-piyush-default-rtdb.firebaseio.com/sent-emails/${senderMail}`;
+  
+  const url1 = `${process.env.REACT_APP_FIREBASE_URL}/emails`;
+  const url2 = `${process.env.REACT_APP_FIREBASE_URL}/sent-emails/${senderMail}`;
 
   const onDeleteHandler = async () => {
     try {
