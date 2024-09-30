@@ -75,9 +75,22 @@ const Sent = () => {
           </Button>
         </div>
       </div>
-      {sentMails.length === 0 ? (
+      {isLoading ? (
+        <div className=" d-flex h-50 justify-content-center align-items-center">
+          <LoadingSpinner />
+        </div>
+      ) : sentMails.length === 0 ? (
         <>
-          <p className="text-center mt-4 fw-bold fs-7">Sent is empy</p>
+          <p className="text-center mt-4 fw-bold fs-7">
+            Your sent folder looks empty! Every sent message starts a
+            conversation. Compose and send your first message with Mail Express.
+          </p>
+
+          <div className="text-center mt-3">
+            <Link to="/Sidebar/ComposeMail" className="btn btn-primary">
+              Click to compose now
+            </Link>
+          </div>
         </>
       ) : (
         <ListGroup variant="flush">
