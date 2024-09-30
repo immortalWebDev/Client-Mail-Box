@@ -1,6 +1,6 @@
 import { ListGroup, Row, Col, Form } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
-import { setIsChecked, setRead} from "../../store/mailSlice";
+import { setIsChecked, setRead, toggleStarred } from "../../store/mailSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import useFetch from "../../hooks/useFetch";
@@ -74,20 +74,37 @@ const MailList = (props) => {
     }
   };
 
+  const getMailAddress = (mail) => {
+    if (
+      location.pathname === "/Sidebar/inbox" ||
+      location.pathname === "/Sidebar/starred" ||
+      location.pathname === "/Sidebar/trash"
+    ) {
+      return mail.sender;
+    } else if (location.pathname === "/Sidebar/sent") {
+      return mail.recipient;
+    }
+    return "";
+  };
+
   return (
     <ListGroup.Item
       as={Link}
       to={
         location.pathname === "/Sidebar/inbox"
           ? `/Sidebar/inbox/${mail.id}`
+          : location.pathname === "/Sidebar/trash"
+          ? `/Sidebar/trash/${mail.id}`
           : location.pathname === "/Sidebar/sent"
           ? `/Sidebar/sent/${mail.id}`
           : `/Sidebar/starred/${mail.id}`
       }
       className={`mb-1 py-2 border-bottom ${
         mail.isChecked ? "bg-success bg-opacity-25" : ""
-      }`}
+      } ${isHovered ? "shadow-lg" : ""}`}
       onClick={onClickHandler}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <Row>
         <Col lg="3">
@@ -95,10 +112,33 @@ const MailList = (props) => {
             <Form>
               <Form.Check
                 checked={mail.isChecked}
-                onChange={() => dispatch(setIsChecked({ id: mail.id, selector: "SINGLE" }))}
+                onChange={onCheckHandler}
                 onClick={(e) => e.stopPropagation()}
               />
             </Form>
+
+            <div>
+              {mail.starred ? (
+                <i
+                  className={`bi bi-star-fill text-warning px-1 ms-2 ${
+                    starHovered ? "bg-secondary bg-opacity-10 rounded" : ""
+                  }`}
+                  onClick={starClickHandler}
+                  onMouseEnter={starMouseEnter}
+                  onMouseLeave={starMouseLeave}
+                />
+              ) : (
+                <i
+                  className={`bi bi-star px-1 ms-2 ${
+                    starHovered ? "bg-secondary rounded bg-opacity-10" : ""
+                  }`}
+                  onClick={starClickHandler}
+                  onMouseEnter={starMouseEnter}
+                  onMouseLeave={starMouseLeave}
+                />
+              )}
+            </div>
+
             <p className="fw-bold ps-2 m-0">
               <i className={`bi ${mail.isRead ? "invisible" : ""} bi-record-fill text-primary pe-1`}></i>
               {mail.sender}
