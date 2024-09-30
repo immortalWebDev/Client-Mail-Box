@@ -52,8 +52,8 @@ const ComposeMail = () => {
     if (emailInfo.recipient !== emailInfo.sender) {
       try {
         const url1 =
-          "https://mail-box-piyush-default-rtdb.firebaseio.com/emails.json";
-        const url2 = `https://mail-box-piyush-default-rtdb.firebaseio.com/sent-emails/${email}.json`;
+          `${process.env.REACT_APP_FIREBASE_URL}/emails.json`;
+        const url2 = `${process.env.REACT_APP_FIREBASE_URL}/sent-emails/${email}.json`;
 
         const requests = [
           axios.post(url1, emailInfo),

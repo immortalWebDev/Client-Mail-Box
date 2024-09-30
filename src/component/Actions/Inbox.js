@@ -31,7 +31,7 @@ const Inbox = () => {
         .filter((mail) => mail.isChecked)
         .map((mail) =>
           axios.put(
-            `https://mail-box-piyush-default-rtdb.firebaseio.com/emails/${mail.id}.json`,
+            `${process.env.REACT_APP_FIREBASE_URL}/emails/${mail.id}.json`,
             {
               ...mail,
               isChecked: false,

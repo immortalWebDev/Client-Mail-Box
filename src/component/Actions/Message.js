@@ -22,8 +22,8 @@ const Message = () => {
   if (mails.length > 0) {
     url =
       mail.sender === email
-        ? `https://mail-box-piyush-default-rtdb.firebaseio.com/sent-emails/${senderMail}/${mail.id}.json`
-        : `https://mail-box-piyush-default-rtdb.firebaseio.com/emails/${mail.id}.json`;
+        ? `${process.env.REACT_APP_FIREBASE_URL}/sent-emails/${senderMail}/${mail.id}.json`
+        : `${process.env.REACT_APP_FIREBASE_URL}/emails/${mail.id}.json`;
   }
 
   const moveToTrashHandler = () => {
