@@ -15,8 +15,11 @@ const Sent = () => {
   
   const mails = useSelector((state) => state.mail.mails);
   const email = useSelector((state) => state.auth.email);
+  const senderMail = email.replace(/[.]/g, "");
 
-  const sentMails = mails.filter(
+  const reversedMails = [...mails].reverse();
+  
+  const sentMails = reversedMails.filter(
     (mail) => !mail.isTrashed && mail.sender === email
   );
   const isLoading = useSelector((state) => state.mail.isLoading);
@@ -28,7 +31,7 @@ const Sent = () => {
         .filter((mail) => mail.isChecked)
         .map((mail) =>
           axios.put(
-            `https://mail-box-piyush-default-rtdb.firebaseio.com/sent-emails/${senderMail}/${mail.id}.json`,
+            `${process.env.REACT_APP_FIREBASE_URL}/sent-emails/${senderMail}/${mail.id}.json`,
             {
               ...mail,
               isChecked: false,
@@ -56,7 +59,7 @@ const Sent = () => {
     };
   }, [dispatch]);
   
-
+  
   return (
     <>
       <div className="border-bottom d-flex align-items-center py-2 px-1 mt-5 mt-lg-0">
