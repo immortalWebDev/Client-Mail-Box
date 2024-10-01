@@ -47,12 +47,12 @@ const Sidebar = () => {
   const handleShow = () => setShow(true);
 
   return (
-    <Container fluid>
+    <Container fluid >
       <Row className="vh-100 overflow-hidden">
         <Col
           className="d-flex flex-column p-0 pb-4"
           xs="auto"
-          style={{backgroundColor: '#e2e3e5'}}
+          style={{backgroundColor: '#e2e3e5' ,borderRight: '1px solid #1E90FF'}}
         >
           <Offcanvas
             className="p-lg-4"
@@ -62,7 +62,7 @@ const Sidebar = () => {
           >
             
             <Offcanvas.Body className="d-flex flex-column p-lg-2">
-              <div className="text-center" onClick={showAboutUS} style={{cursor:'pointer'}}>
+              <div className="text-center" onClick={showAboutUS} style={{cursor:'pointer', border: 'solid 0.5px deepskyblue', borderRadius: '25px' , paddingRight:'10px'}}>
                 <i className="bi-envelope-fill fs-1" style={{ color: "#3498db" }}></i>
                 <p
                   className="ps-2 fs-4 fw-bold"
@@ -178,7 +178,7 @@ const Sidebar = () => {
         </Col>
 
         <Col
-          style={{ maxHeight: "100vh", backgroundColor: "#fbfbfb" }}
+          style={{ maxHeight: "100vh", backgroundColor: "#f1f1f1" }}
           className="overflow-auto"
         >
           {message && (
