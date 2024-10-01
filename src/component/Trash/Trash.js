@@ -1,3 +1,5 @@
+import { useState,useEffect } from "react";
+import axios from "axios";
 import { Button, ListGroup } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import MailList from "../Actions/MailList";
@@ -15,10 +17,12 @@ const Trash = () => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  
+
   const senderMail = email.replace(/[.]/g, "");
   const dispatch = useDispatch();
+  const isLoading = useSelector((state) => state.mail.isLoading);
 
+  
   const filteredMails = mails.filter((mail) => mail.isTrashed);
 
   const isDeleteEnabled = filteredMails.some((item) => item.isChecked);
@@ -80,7 +84,13 @@ const Trash = () => {
       console.log(data.error.message);
     }
   };
-
+   
+   useEffect(() => {
+    return () => {
+      dispatch(setIsChecked({ id: null, selector: "none" }));
+    };
+  }, [dispatch]);
+  
   return (
     <>
       {
