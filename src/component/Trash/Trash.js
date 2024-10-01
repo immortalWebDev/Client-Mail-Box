@@ -104,12 +104,25 @@ const Trash = () => {
       <div className="border-bottom d-flex align-items-center py-2 px-1 mt-5 mt-lg-0">
         <DropdownMenu filteredMails={filteredMails} />
         <div className="ms-auto">
-        <Button
-          disabled={filteredMails.length === 0}
-          onClick={emptyTrashHandler}
-        >
-          Delete Permanently
-        </Button>
+          <Button
+            disabled={filteredMails.length === 0}
+            size="sm"
+            variant="danger"
+            className="border-0 me-3 bi-trash"
+            onClick={handleShow}
+          >
+            {`${"  Delete Permanently"}`}
+          </Button>
+          <Button
+            disabled={!isDeleteEnabled}
+            size="sm"
+            variant="primary"
+            className="border-0 "
+            onClick={onRestoreHandler}
+          >
+            Restore Mails
+          </Button>
+        </div>
       </div>
       {filteredMails.length === 0 ? (
         <p>Trash is empty</p>
