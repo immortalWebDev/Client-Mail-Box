@@ -7,7 +7,11 @@ import useFetch from "../../hooks/useFetch";
 import DOMPurify from "dompurify";
 
 const MailList = (props) => {
+  // console.log(props)
   const { mail } = props;
+
+  // console.log(mail)
+
   const email = useSelector((state) => state.auth.email);
   const senderMail = email.replace(/[.]/g, "");
   const location = useLocation();

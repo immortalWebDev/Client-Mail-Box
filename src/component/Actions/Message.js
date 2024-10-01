@@ -6,7 +6,6 @@ import { moveToTrash, deleteForever } from "../../store/mailSlice";
 import { showNotification } from "../../store/authSlice";
 import DOMPurify from "dompurify";
 import useFetch from "../../hooks/useFetch";
-import DOMPurify from "dompurify";
 
 const Message = () => {
   const { messageId } = useParams();
@@ -20,7 +19,6 @@ const Message = () => {
   const { fetchData } = useFetch();
 
   let url;
-
   if (mails.length > 0) {
     url =
       mail.sender === email
@@ -46,7 +44,6 @@ const Message = () => {
         } else {
           history.replace("/Sidebar/starred");
         }
-        
       }
     };
 

@@ -12,7 +12,6 @@ import axios from "axios";
 
 
 const Sent = () => {
-  
   const mails = useSelector((state) => state.mail.mails);
   const email = useSelector((state) => state.auth.email);
   const senderMail = email.replace(/[.]/g, "");

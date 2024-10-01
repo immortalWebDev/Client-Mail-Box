@@ -29,10 +29,7 @@ const SignUp = () => {
 
   const dispatch = useDispatch();
   const [signIn, setSignIn] = useState(true);
-  const [isLoading, setIsLoading] = useState(false); 
-
   const history = useHistory();
-  const apiKey = useSelector((state) => state.auth.apiKey);
 
   const onClickHandler = () => {
     setSignIn(!signIn);
