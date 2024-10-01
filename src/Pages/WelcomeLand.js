@@ -18,8 +18,8 @@ const WelcomeLand = () => {
     <Container className="mt-3">
       <Row className="justify-content-center">
         <Col md={8}>
-          <Card>
-            <Card.Body>
+          <Card >
+            <Card.Body style={{border: 'solid 1px deepskyblue' , borderRadius: '10px'}}>
               <Card.Title className="text-center mb-4 fw-bold fs-4">Mail Express in a nutshell</Card.Title>
               <Card.Text>
                 Mail Express is your comprehensive in-app email service, designed to simplify your communication needs. Whether you're managing personal messages or business correspondence, Mail Express offers a range of features to enhance your experience.
