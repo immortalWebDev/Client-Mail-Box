@@ -152,15 +152,39 @@ const SignUp = () => {
                 )}
               </h3>
             </div>
+
+            <div
+              style={{
+                maxWidth: "30rem",
+                backgroundColor: "#3498db",
+                borderRadius: "1rem",
+              }}
+              className="text-center bg-gradient mx-auto py-1"
+            >
+              <i className="bi-send fs-1 text-white"></i>
+            </div>
             <Form
               onSubmit={onSubmitHandler}
               className="p-4 shadow-lg mx-auto"
+              style={{
+                maxWidth: "30rem",
+                backgroundColor: "#f0f0f0",
+                borderRadius: "1rem",
+              }}
             >
-              <Form.Group className="mb-3">
+              <FloatingLabel
+                controlId="floatingInput"
+                label="Enter email"
+                className="mb-3"
+              >
                 <Form.Control
+                  className={`border-0 border-bottom ${
+                    emailHasError ? "border-danger" : ""
+                  } rounded-1`}
                   type="email"
                   placeholder="Enter email"
                   onChange={emailInputHandler}
+                  onBlur={emailBlurHandler}
                   value={enteredEmail}
                   required
                 />
@@ -175,13 +199,25 @@ const SignUp = () => {
                 label="Enter password"
               >
                 <Form.Control
+                  className={`border-0 ${
+                    passwordHasError ? "border-danger" : ""
+                  } border-bottom rounded-1`}
                   type="password"
                   placeholder="Enter password"
+                  onBlur={passwordBlurHandler}
                   onChange={passwordInputHandler}
                   value={enteredPassword}
                   required
                 />
-              </Form.Group>
+                {passwordHasError && signIn && (
+                  <p className="text-danger">Enter valid password to login </p>
+                )}
+                {passwordHasError && !signIn && (
+                  <p className="text-danger">
+                    Password length should be minimum 8 characters{" "}
+                  </p>
+                )}
+              </FloatingLabel>
               {!signIn && (
                 <FloatingLabel
                   controlId="floatingConfirmPassword"
