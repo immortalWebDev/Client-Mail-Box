@@ -71,6 +71,7 @@ const Trash = () => {
         )
       );
       await Promise.all(updatedPromises);
+
       dispatch(emptyTrash());
       setShow(false);
       dispatch(
@@ -124,10 +125,17 @@ const Trash = () => {
           </Button>
         </div>
       </div>
-      {filteredMails.length === 0 ? (
-        <p>Trash is empty</p>
+      {isLoading ? (
+        <div className=" d-flex h-50 justify-content-center align-items-center">
+          <LoadingSpinner />
+        </div>
+      ) : filteredMails.length === 0 ? (
+        <p className="text-center mt-4 fw-bold fs-7">
+          Your trash bin is clean and tidy! Deleted messages are moved here.
+          Restore or delete messages to keep things organized.
+        </p>
       ) : (
-        <ListGroup>
+        <ListGroup variant="flush" className="overflow-auto">
           {filteredMails.map((mail) => (
             <MailList mail={mail} key={mail.id} />
           ))}
