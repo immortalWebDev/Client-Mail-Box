@@ -70,14 +70,25 @@ const SignUp = () => {
         }
       }
     } catch (error) {
-      alert("Error occurred. Please try again."); 
-      setIsLoading(false);
-    }
-  };
+      // const { data } = error.response;
+      
+      // const { message } = data.error;
+      // dispatch(showNotification({ message: message, variant: "danger" }));
 
-  const loginHandler = (data) => {
-    login({ idToken: data.idToken, email: data.email });
-    history.replace("/Sidebar/inbox");
+      if (!error.response) {
+        // Handle the case where error.response is undefined
+        dispatch(showNotification({ message: "Could not connect. Please check your internet connection and try again.", variant: "danger" }));
+      } else {
+        const { data } = error.response;
+        const { message } = data.error;
+        if(message === 'INVALID_LOGIN_CREDENTIALS')
+          {
+            dispatch(showNotification({ message: 'You have entered invalid credentials!', variant: "danger" }));
+          }
+      }
+    } finally {
+      dispatch(setIsLoading(false));
+    }
   };
 
   const emailInputHandler = (event) => {
