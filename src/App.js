@@ -15,9 +15,8 @@ function App() {
   const mails = useSelector((state) => state.mail.mails);
   const dispatch = useDispatch();
 
-  const url1 =
-    "https://mail-box-piyush-default-rtdb.firebaseio.com/emails.json";
-  const url2 = `https://mail-box-piyush-default-rtdb.firebaseio.com/sent-emails/${email}.json`;
+  const url1 = `${process.env.REACT_APP_FIREBASE_URL}/emails.json`;
+  const url2 = `${process.env.REACT_APP_FIREBASE_URL}/sent-emails/${email}.json`;
 
   const urls = useMemo(() => [url1, url2], [url1, url2]);
 
@@ -100,7 +99,7 @@ function App() {
     return () => {
       clearInterval(interval);
     };
-  }, [fetchData, recipientMail, mails, dispatch]);
+  }, [fetchData, recipientMail, mails, dispatch, url1, url2]);
 
   return (
     <Switch>
