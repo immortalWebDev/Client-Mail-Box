@@ -11,7 +11,7 @@ function App() {
   const recipientMail = useSelector((state) => state.auth.email);
 
   const { fetchData } = useFetch();
-  const email = isAuthenticated ? recipientMail.replace(/[.]/g, "") : undefined;
+  const email = isAuthenticated ? (recipientMail ? recipientMail.replace(/[.]/g, "") : undefined)  : undefined;
   const mails = useSelector((state) => state.mail.mails);
   const dispatch = useDispatch();
 
