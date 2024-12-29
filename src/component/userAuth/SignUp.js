@@ -130,7 +130,7 @@ const SignUp = () => {
             </div>
           )}
           <Col md={6} className="d-none d-md-block ml-5" style={{ paddingLeft: "70px" }}>
-            <img src="/Mail-Express.jpg" alt="Email" className="img-fluid" />
+            <img src="https://cdn.jsdelivr.net/gh/immortalWebDev/my-cdn@d811aeb0f5ed6128c7380e47c9d57a951f604063/mail-express/Mail-Express.jpg" alt="Email" className="img-fluid" />
           </Col>
           <Col md={6}>
             <div className="text-center pb-4">
