@@ -16,7 +16,7 @@ const Starred = () => {
   const senderMail = email.replace(/[.]/g, "");
   const starredMails = mails.filter((mail) => mail.starred && !mail.isTrashed);
   const isDeleteEnabled = starredMails.some((mail) => mail.isChecked);
-  
+
   const url1 = `${process.env.REACT_APP_FIREBASE_URL}/emails`;
   const url2 = `${process.env.REACT_APP_FIREBASE_URL}/sent-emails/${senderMail}`;
 
@@ -60,22 +60,23 @@ const Starred = () => {
   }, [dispatch]);
 
   return (
-    <>
-      <div className="border-bottom d-flex align-items-center py-2 px-1 mt-5 mt-lg-0">
+    <div className="mt-custom">
+      <div className="border-bottom d-flex align-items-center py-2 px-1 mt-4 mt-lg-0">
         <DropdownMenu filteredMails={starredMails} />
         <div className="ms-auto">
           <Button
             variant="primary"
-            className="px-2 border-2"
+            size="sm"
+            className="border-0"
             disabled={!isDeleteEnabled}
             onClick={onDeleteHandler}
           >
-            Delete Mail
+            Send to Trash
           </Button>
         </div>
       </div>
       {isLoading ? (
-        <div className=" d-flex h-50 justify-content-center align-items-center">
+        <div className=" d-flex mt-5 pt-5 justify-content-center align-items-center">
           <LoadingSpinner />
         </div>
       ) : starredMails.length === 0 ? (
@@ -90,7 +91,7 @@ const Starred = () => {
           ))}
         </ListGroup>
       )}
-    </>
+    </div>
   );
 };
 

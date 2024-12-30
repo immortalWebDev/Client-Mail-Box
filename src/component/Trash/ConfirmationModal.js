@@ -1,10 +1,10 @@
 import { Modal, Button } from "react-bootstrap";
 
-const ConfirmationModal = (props) => {
+const ConfirmationModal = ({show,handleClose,emptyTrashHandler}) => {
   return (
     <Modal
-      show={props.show}
-      onHide={props.handleClose}
+      show={show}
+      onHide={handleClose}
       centered
     >
       <Modal.Header closeButton>
@@ -15,10 +15,10 @@ const ConfirmationModal = (props) => {
         be able to see them back ever again!
       </Modal.Body>
       <Modal.Footer className="border-0">
-        <Button className="rounded-2" onClick={props.handleClose}>
+        <Button className="rounded-2" onClick={handleClose}>
           No wait
         </Button>
-        <Button className="rounded-2" onClick={props.emptyTrashHandler}>
+        <Button className="rounded-2" onClick={emptyTrashHandler}>
           Yes Delete it!
         </Button>
       </Modal.Footer>

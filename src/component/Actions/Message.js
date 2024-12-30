@@ -8,6 +8,8 @@ import DOMPurify from "dompurify";
 import useFetch from "../../hooks/useFetch";
 
 const Message = () => {
+
+  const dispatch = useDispatch();
   const { messageId } = useParams();
   const location = useLocation();
 
@@ -87,7 +89,7 @@ const Message = () => {
         : "/Sidebar/starred"
     );
   };
-  const dispatch = useDispatch();
+  
   if (mails.length === 0) {
     return (
       <Container className="h-100">
@@ -100,12 +102,8 @@ const Message = () => {
 
   return (
     <>
-      <div className="border-bottom py-2 px-1 d-flex align-items-center mt-5 mt-lg-0">
-        <p
-          className="m-0"
-          onClick={onBackHandler}
-          style={{ cursor: "pointer" }}
-        >
+      <div className="border-bottom py-2 px-1 d-flex align-items-center message-content-inbox">
+        <p className="m-0 go-back-button" onClick={onBackHandler}>
           <i className="bi bi-chevron-double-left pe-2"></i>
           <span>Go back</span>
         </p>
@@ -113,12 +111,13 @@ const Message = () => {
         {location.pathname !== `/Sidebar/trash/${messageId}` ? (
           <Button
             variant="primary"
+            size="sm"
             className="px-2 border-0 ms-auto"
             onClick={moveToTrashHandler}
           >
             <p className="mx-auto p-0 m-0">
               <i className="bi text-warning pe-2 bi-trash"></i>
-              <span>Delete</span>
+              <span>Trash it</span>
             </p>
           </Button>
         ) : (
@@ -134,7 +133,7 @@ const Message = () => {
           </Button>
         )}
       </div>
-      <div style={{ maxHeight: "80vh" }} className="overflow-auto">
+      <div className="overflow-auto compose-details">
         <div className="pt-3">
           <span className="fw-bold">From: </span>
           <span>{mail.sender}</span>
@@ -150,9 +149,11 @@ const Message = () => {
         </div>
 
         <hr />
-        <div className="mt-3">
-          <p className="text-dark fw-bold text-decoration-underline">Matter of Mail:</p>
-          
+        <div className="mt-3 matter-mail">
+          <p className="text-dark fw-bold text-decoration-underline">
+            Matter of Mail:
+          </p>
+
           <div
             dangerouslySetInnerHTML={{
               __html: DOMPurify.sanitize(mail.emailContent),

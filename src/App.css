@@ -1,0 +1,114 @@
+.go-back-button,
+.switch-log-sign,
+.three-dots-menu,
+.email-container,
+.offcanvas-body{
+  cursor: pointer;
+}
+
+.paper-plane-signup,
+.signup-form-container {
+  max-width: 30rem;
+  border-radius: 1rem;
+}
+
+.paper-plane-signup {
+  background-color: #3498db;
+}
+
+.signup-form-container {
+  background-color: #f0f0f0c0;
+}
+
+.sidebar-container {
+  background-color: #f1f1f1;
+  border-right: 1px solid #1e90ff;
+}
+
+.offcanvas-container {
+  --bs-offcanvas-width: 200px;
+}
+
+.offcanvas-body-container {
+  border-radius: 25px;
+  padding-right: 10px;
+  border: 0.5px solid deepskyblue;
+}
+
+.mex-logo,
+.compose-logo,
+.inbox-logo,
+.sent-logo,
+.trash-logo,
+.starred-logo {
+  color: #3498db;
+}
+
+.mex-title {
+  font-family: math, sans-serif;
+  color: #3498db;
+}
+
+.main-content{
+  max-height: 100vh;
+  background-color: #f1f1f1;
+}
+
+.notification-bottom{
+  max-width: 20rem;
+}
+
+.welcome-text-top {
+  font-family: monospace;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+}
+
+.landing-card-body {
+  border: 1px solid deepskyblue;
+  border-radius: 10px;
+}
+
+.matter-mail{
+    min-height: 20rem;
+    background-color: white;
+    padding: 12px;
+    border-radius: 12px;
+}
+
+@media (max-width: 475px) {
+  .mail-express,
+  .welcome-text-top {
+    display: none !important;
+  }
+
+  .mt-custom {
+    margin-top: 64px;
+  }
+
+  .trash-custom {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    justify-content: flex-end;
+  }
+
+  .compose-mail {
+    margin-top: 4rem;
+  }
+
+  .card-body {
+    margin: 4rem 1rem 1rem 1rem;
+  }
+
+  .message-content-inbox {
+    margin-top: 4rem !important;
+  }
+}
+
+@media (max-width: 990px) {
+  .message-content-inbox {
+    margin-top: 1rem;
+  }
+}

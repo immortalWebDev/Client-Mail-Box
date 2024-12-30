@@ -7,6 +7,7 @@ import { BrowserRouter } from "react-router-dom/cjs/react-router-dom.min";
 import { Provider } from "react-redux";
 import store from "./store/store";
 import reportWebVitals from "./reportWebVitals";
+import "./App.css"
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 

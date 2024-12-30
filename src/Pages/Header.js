@@ -12,17 +12,18 @@ const Header = ({ handleShow }) => {
         <span className="px-2 py-2">
           <i
             onClick={handleShow}
-            style={{ cursor: "pointer" }}
-            className="bi bi-three-dots-vertical fs-2 mt-1 ps-2"
+            className="bi bi-three-dots-vertical fs-2 mt-1 ps-2 three-dots-menu"
           ></i>
           <i className="bi fs-2 text-dark ps-2 bi-envelope">
             {" "}
-            <span className="fs-10 fw-bold">Mail Express</span>
+            <span className="fs-10 fw-bold mail-express">Mail Express</span>
           </i>{" "}
         </span>
         <span className="text-end pe-2">
           {/* <p className="mb-0 ">Logged in as:</p> */}
-          <p className="mb-0 text-dark fw-bold">{email} | <Logout /></p>
+          <p className="mb-0 text-dark fw-bold">
+            {email} | <Logout />
+          </p>
         </span>
       </div>
     </header>

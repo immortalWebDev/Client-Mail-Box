@@ -4,7 +4,6 @@ import { Form, Button, InputGroup } from "react-bootstrap";
 import { useRef, useState } from "react";
 import { EditorState, convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
-
 import { useSelector, useDispatch } from "react-redux";
 import { showNotification } from "../../store/authSlice";
 import axios from "axios";
@@ -14,7 +13,9 @@ const ComposeMail = () => {
   const toRef = useRef();
   const subjectRef = useRef();
   const senderEmail = useSelector((state) => state.auth.email);
-  const email = senderEmail.replace(/[.]/g, "");
+  // const email = senderEmail.replace(/[.]/g, "");
+  const email = senderEmail ? senderEmail.replace(/[.]/g, "") : undefined;
+
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
   const [isLoading, setIsLoading] = useState(false);
@@ -51,8 +52,7 @@ const ComposeMail = () => {
 
     if (emailInfo.recipient !== emailInfo.sender) {
       try {
-        const url1 =
-          `${process.env.REACT_APP_FIREBASE_URL}/emails.json`;
+        const url1 = `${process.env.REACT_APP_FIREBASE_URL}/emails.json`;
         const url2 = `${process.env.REACT_APP_FIREBASE_URL}/sent-emails/${email}.json`;
 
         const requests = [
@@ -96,7 +96,7 @@ const ComposeMail = () => {
 
   return (
     <>
-      <Form onSubmit={onSubmitHandler} className="p-3 mt-4 mt-lg-0">
+      <Form onSubmit={onSubmitHandler} className="p-3 compose-mail">
         <InputGroup className="mb-3">
           <InputGroup.Text id="basic-addon1">To</InputGroup.Text>
           <Form.Control

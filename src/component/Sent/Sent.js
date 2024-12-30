@@ -5,11 +5,9 @@ import LoadingSpinner from "../userInterface/LoadingSpinner";
 import MailList from "../Actions/MailList";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { moveFromSent,setIsChecked } from "../../store/mailSlice";
+import { moveFromSent, setIsChecked } from "../../store/mailSlice";
 import { showNotification } from "../../store/authSlice";
 import axios from "axios";
-
-
 
 const Sent = () => {
   const mails = useSelector((state) => state.mail.mails);
@@ -17,7 +15,7 @@ const Sent = () => {
   const senderMail = email.replace(/[.]/g, "");
 
   const reversedMails = [...mails].reverse();
-  
+
   const sentMails = reversedMails.filter(
     (mail) => !mail.isTrashed && mail.sender === email
   );
@@ -46,36 +44,35 @@ const Sent = () => {
       );
     } catch (error) {
       const { data } = error.response;
-      
+
       console.log(data.error.message);
     }
   };
-  
-   
-   useEffect(() => {
+
+  useEffect(() => {
     return () => {
       dispatch(setIsChecked({ id: null, selector: "none" }));
     };
   }, [dispatch]);
-  
-  
+
   return (
-    <>
-      <div className="border-bottom d-flex align-items-center py-2 px-1 mt-5 mt-lg-0">
+    <div className="mt-custom">
+      <div className="border-bottom d-flex align-items-center py-2 px-1 mt-4 mt-lg-0">
         <DropdownMenu filteredMails={sentMails} />
         <div className="ms-auto">
-        <Button
+          <Button
             variant="primary"
-            className="px-2 border-2"
+            size="sm"
+            className="border-0"
             disabled={!isDeleteEnabled}
             onClick={onDeleteHandler}
           >
-            Delete Mail
+            Send to Trash
           </Button>
         </div>
       </div>
       {isLoading ? (
-        <div className=" d-flex h-50 justify-content-center align-items-center">
+        <div className=" d-flex mt-5 pt-5 justify-content-center align-items-center">
           <LoadingSpinner />
         </div>
       ) : sentMails.length === 0 ? (
@@ -98,7 +95,7 @@ const Sent = () => {
           ))}
         </ListGroup>
       )}
-    </>
+    </div>
   );
 };
 

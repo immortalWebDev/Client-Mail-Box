@@ -68,20 +68,30 @@ const SignUp = () => {
       }
     } catch (error) {
       // const { data } = error.response;
-      
+
       // const { message } = data.error;
       // dispatch(showNotification({ message: message, variant: "danger" }));
 
       if (!error.response) {
         // Handle the case where error.response is undefined
-        dispatch(showNotification({ message: "Could not connect. Please check your internet connection and try again.", variant: "danger" }));
+        dispatch(
+          showNotification({
+            message:
+              "Could not connect. Please check your internet connection and try again.",
+            variant: "danger",
+          })
+        );
       } else {
         const { data } = error.response;
         const { message } = data.error;
-        if(message === 'INVALID_LOGIN_CREDENTIALS')
-          {
-            dispatch(showNotification({ message: 'You have entered invalid credentials!', variant: "danger" }));
-          }
+        if (message === "INVALID_LOGIN_CREDENTIALS") {
+          dispatch(
+            showNotification({
+              message: "You have entered invalid credentials!",
+              variant: "danger",
+            })
+          );
+        }
       }
     } finally {
       dispatch(setIsLoading(false));
@@ -129,8 +139,12 @@ const SignUp = () => {
               <Notification message={message} variant={variant} />{" "}
             </div>
           )}
-          <Col md={6} className="d-none d-md-block ml-5" style={{ paddingLeft: "70px" }}>
-            <img src="https://cdn.jsdelivr.net/gh/immortalWebDev/my-cdn@d811aeb0f5ed6128c7380e47c9d57a951f604063/mail-express/Mail-Express.jpg" alt="Email" className="img-fluid" />
+          <Col md={6} className="d-none d-md-block ml-5 signup-cartoon">
+            <img
+              src="https://cdn.jsdelivr.net/gh/immortalWebDev/my-cdn@d811aeb0f5ed6128c7380e47c9d57a951f604063/mail-express/Mail-Express.jpg"
+              alt="Email"
+              className="img-fluid"
+            />
           </Col>
           <Col md={6}>
             <div className="text-center pb-4">
@@ -145,29 +159,20 @@ const SignUp = () => {
                     </i>
                   </>
                 ) : (
-                  <span>Heyy glad to <i className="text-primary fw-bold">see you</i> again <i className="bi bi-emoji-smile text-primary"></i></span>
+                  <span>
+                    Heyy glad to <i className="text-primary fw-bold">see you</i>{" "}
+                    again <i className="bi bi-emoji-smile text-primary"></i>
+                  </span>
                 )}
               </h3>
             </div>
 
-            <div
-              style={{
-                maxWidth: "30rem",
-                backgroundColor: "#3498db",
-                borderRadius: "1rem",
-              }}
-              className="text-center bg-gradient mx-auto py-1"
-            >
+            <div className="text-center bg-gradient mx-auto py-1 paper-plane-signup">
               <i className="bi-send fs-1 text-white"></i>
             </div>
             <Form
               onSubmit={onSubmitHandler}
-              className="p-4 shadow-lg mx-auto"
-              style={{
-                maxWidth: "30rem",
-                backgroundColor: "#f0f0f0",
-                borderRadius: "1rem",
-              }}
+              className="p-4 shadow-lg mx-auto signup-form-container"
             >
               <FloatingLabel
                 controlId="floatingInput"
@@ -270,8 +275,7 @@ const SignUp = () => {
                   )}{" "}
                   <span
                     onClick={onClickHandler}
-                    className="text-primary"
-                    style={{ cursor: "pointer" }}
+                    className="text-primary switch-log-sign"
                   >
                     {" "}
                     {!signIn ? "Login" : "Sign Up"}

@@ -1,14 +1,18 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { Button, ListGroup } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import MailList from "../Actions/MailList";
 import DropdownMenu from "../Actions/DropdownMenu";
 import ConfirmationModal from "./ConfirmationModal";
-import { moveFromInbox, moveFromSent,emptyTrash,setIsChecked } from "../../store/mailSlice";
+import {
+  moveFromInbox,
+  moveFromSent,
+  emptyTrash,
+  setIsChecked,
+} from "../../store/mailSlice";
 import { showNotification } from "../../store/authSlice";
 import LoadingSpinner from "../userInterface/LoadingSpinner";
-
 
 const Trash = () => {
   const mails = useSelector((state) => state.mail.mails);
@@ -22,7 +26,6 @@ const Trash = () => {
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.mail.isLoading);
 
-  
   const filteredMails = mails.filter((mail) => mail.isTrashed);
 
   const isDeleteEnabled = filteredMails.some((item) => item.isChecked);
@@ -85,15 +88,15 @@ const Trash = () => {
       console.log(data.error.message);
     }
   };
-   
-   useEffect(() => {
+
+  useEffect(() => {
     return () => {
       dispatch(setIsChecked({ id: null, selector: "none" }));
     };
   }, [dispatch]);
-  
+
   return (
-    <>
+    <div className="mt-custom">
       {
         <ConfirmationModal
           handleClose={handleClose}
@@ -102,17 +105,17 @@ const Trash = () => {
         />
       }
 
-      <div className="border-bottom d-flex align-items-center py-2 px-1 mt-5 mt-lg-0">
+      <div className="border-bottom d-flex align-items-center py-2 px-1 mt-4 mt-lg-0">
         <DropdownMenu filteredMails={filteredMails} />
-        <div className="ms-auto">
+        <div className="ms-auto d-flex gap-2 trash-custom">
           <Button
             disabled={filteredMails.length === 0}
             size="sm"
             variant="danger"
-            className="border-0 me-3 bi-trash"
+            className="border-0 bi-trash delete-permanent"
             onClick={handleShow}
           >
-            {`${"  Delete Permanently"}`}
+            {`${"  Wipe out"}`}
           </Button>
           <Button
             disabled={!isDeleteEnabled}
@@ -121,7 +124,7 @@ const Trash = () => {
             className="border-0 "
             onClick={onRestoreHandler}
           >
-            Restore Mails
+            Restore all
           </Button>
         </div>
       </div>
@@ -141,7 +144,7 @@ const Trash = () => {
           ))}
         </ListGroup>
       )}
-    </>
+    </div>
   );
 };
 

@@ -18,7 +18,7 @@ const mailSlice = createSlice({
 
       if (selector === "single") {
         const mailItem = state.mails.find((item) => item.id === id);
-        console.log(mailItem);
+        // console.log(mailItem);
 
         if (mailItem) {
           mailItem.isChecked = !mailItem.isChecked;
