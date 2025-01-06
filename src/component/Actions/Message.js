@@ -1,6 +1,8 @@
 import { useParams, useHistory, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { Container, Button } from "react-bootstrap";
+// import { Container, Button } from "react-bootstrap";
+import Container from "react-bootstrap/Container"
+import Button from "react-bootstrap/Button"
 import LoadingSpinner from "../userInterface/LoadingSpinner";
 import { moveToTrash, deleteForever } from "../../store/mailSlice";
 import { showNotification } from "../../store/authSlice";

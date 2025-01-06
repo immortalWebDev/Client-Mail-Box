@@ -1,19 +1,20 @@
-import {
-  Form,
-  Button,
-  FloatingLabel,
-  Container,
-  Row,
-  Col,
-} from "react-bootstrap";
+import React ,{lazy,Suspense,useState,useEffect} from "react"
+import Form from "react-bootstrap/Form"
+import Button from "react-bootstrap/Button"
+import FloatingLabel from "react-bootstrap/FloatingLabel"
+import Container from "react-bootstrap/Container"
+import Row from "react-bootstrap/Row"
+import Col from "react-bootstrap/Col"
 import axios from "axios";
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { login } from "../../store/authSlice";
 import { showNotification } from "../../store/authSlice";
 import { setIsLoading } from "../../store/authSlice";
-import Notification from "../userInterface/Notification";
+import LoadingSpinner from "../userInterface/LoadingSpinner"
+// import Notification from "../userInterface/Notification";
+
+const LazyNotification  = lazy(() => import("../userInterface/Notification"))
 
 const SignUp = () => {
   const [enteredEmail, setEnteredEmail] = useState("");
@@ -30,6 +31,24 @@ const SignUp = () => {
   const dispatch = useDispatch();
   const [signIn, setSignIn] = useState(true);
   const history = useHistory();
+
+
+  // Preload the image when the component mounts
+  useEffect(() => {
+    if (window.location.pathname === "/auth") {
+      const link = document.createElement("link");
+      link.rel = "preload";
+      link.href =
+        "https://cdn.jsdelivr.net/gh/immortalWebDev/my-cdn@d811aeb0f5ed6128c7380e47c9d57a951f604063/mail-express/Mail-Express.jpg";
+      link.as = "image";
+      document.head.appendChild(link);
+
+      return () => {
+        document.head.removeChild(link); // Clean up on component unmount or page change
+      };
+    }
+  }, []);
+
 
   const onClickHandler = () => {
     setSignIn(!signIn);
@@ -136,7 +155,9 @@ const SignUp = () => {
           {message && (
             <div className="fixed-top p-0">
               {" "}
-              <Notification message={message} variant={variant} />{" "}
+              <Suspense fallback={<LoadingSpinner/>}>
+              <LazyNotification message={message} variant={variant} />{" "}
+              </Suspense>
             </div>
           )}
           <Col md={6} className="d-none d-md-block ml-5 signup-cartoon">

@@ -1,4 +1,5 @@
-import { Button } from "react-bootstrap";
+// import { Button } from "react-bootstrap";
+import Button from "react-bootstrap/Button"
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { logout } from "../../store/authSlice";

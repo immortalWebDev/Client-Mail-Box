@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Button, ListGroup } from "react-bootstrap";
+// import { Button, ListGroup } from "react-bootstrap";
+import Button from "react-bootstrap/Button"
+import ListGroup from "react-bootstrap/ListGroup";
 import { useSelector, useDispatch } from "react-redux";
 import MailList from "../Actions/MailList";
 import DropdownMenu from "../Actions/DropdownMenu";
@@ -129,7 +131,7 @@ const Trash = () => {
         </div>
       </div>
       {isLoading ? (
-        <div className=" d-flex h-50 justify-content-center align-items-center">
+        <div className=" d-flex mt-5 pt-5 justify-content-center align-items-center">
           <LoadingSpinner />
         </div>
       ) : filteredMails.length === 0 ? (

@@ -77,6 +77,10 @@
     border-radius: 12px;
 }
 
+.signup-cartoon{
+  padding-left: 60px;
+}
+
 @media (max-width: 475px) {
   .mail-express,
   .welcome-text-top {

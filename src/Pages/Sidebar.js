@@ -1,19 +1,29 @@
+import { useState,lazy,Suspense } from "react";
 import { NavLink, useLocation, useHistory } from "react-router-dom";
-import {
-  Row,
-  Col,
-  ButtonGroup,
-  ToggleButton,
-  Container,
-  Offcanvas,
-} from "react-bootstrap";
-import { useState } from "react";
+// import {
+  // Row,
+  // Col,
+  // ButtonGroup,
+  // ToggleButton,
+  // Container,
+  // Offcanvas,
+// } from "react-bootstrap";
+
+import Row from "react-bootstrap/Row"
+import Col from "react-bootstrap/Col"
+import ButtonGroup from "react-bootstrap/ButtonGroup";
+import ToggleButton from "react-bootstrap/ToggleButton"
+import Container from "react-bootstrap/Container"
+import Offcanvas from "react-bootstrap/Offcanvas"
 import { useSelector } from "react-redux";
 import Logout from "../component/userAuth/Logout";
-import Notification from "../component/userInterface/Notification";
+// import Notification from "../component/userInterface/Notification";
 import Header from "./Header";
 import MailRoutes from "../component/userInterface/MailRoutes";
 import WelcomeLand from "./WelcomeLand";
+
+const LazyNotification = lazy(() => import("../component/userInterface/Notification"))
+
 
 const Sidebar = () => {
   const history = useHistory();
@@ -165,7 +175,9 @@ const Sidebar = () => {
         <Col className="overflow-auto main-content">
           {message && (
             <div className="fixed-bottom ms-auto mb-3 me-2 notification-bottom">
-              <Notification message={message} variant={variant} />
+              <Suspense fallback={<div>Loading Notification...</div>}>
+              <LazyNotification message={message} variant={variant} />
+              </Suspense>
             </div>
           )}
 

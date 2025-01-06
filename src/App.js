@@ -1,10 +1,12 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo ,lazy,Suspense} from "react";
 import SignUp from "./component/userAuth/SignUp";
-import Sidebar from "./Pages/Sidebar";
 import { useSelector, useDispatch } from "react-redux";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { addToInbox, clearInbox } from "./store/mailSlice";
 import useFetch from "./hooks/useFetch";
+import LoadingSpinner from "./component/userInterface/LoadingSpinner";
+
+const LazySidebar = lazy(() => import("./Pages/Sidebar"))
 
 function App() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -111,7 +113,9 @@ function App() {
       </Route>
       {isAuthenticated && (
         <Route path="/Sidebar">
-          <Sidebar />
+          <Suspense fallback={<span className="d-flex justify-content-center align-items-center vh-100"><LoadingSpinner/></span>}>
+          <LazySidebar />
+          </Suspense>
         </Route>
       )}
       {!isAuthenticated ? (

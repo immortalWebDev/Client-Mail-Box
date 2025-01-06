@@ -1,5 +1,7 @@
 import { useEffect } from "react";
-import { ListGroup, Button } from "react-bootstrap";
+// import { ListGroup, Button } from "react-bootstrap";
+import ListGroup from "react-bootstrap/ListGroup"
+import Button from "react-bootstrap/Button"
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -11,10 +13,10 @@ import DropdownMenu from "../Actions/DropdownMenu";
 
 const Inbox = () => {
 
-  const dispatch = useDispatch();
+  
   const mails = useSelector((state) => state.mail.mails);
-
   const reversedMails = [...mails].reverse();
+  const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.mail.isLoading);
   const email = useSelector((state) => state.auth.email);
   const filteredMails = reversedMails.filter(
@@ -91,7 +93,9 @@ const Inbox = () => {
       ) : (
         <ListGroup variant="flush" className="overflow-auto">
           {filteredMails.map((mail) => (
-            <MailList mail={mail} key={mail.id} />
+            
+            <MailList mail={mail} key={mail.id}/>
+            
           ))}
         </ListGroup>
       )}

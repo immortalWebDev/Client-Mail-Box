@@ -1,10 +1,10 @@
-import { Alert } from "react-bootstrap";
+// import { Alert } from "react-bootstrap";
+import Alert from "react-bootstrap/Alert"
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { showNotification } from "../../store/authSlice";
 
-const Notification = (props) => {
-  
+const Notification = (props) => {  
   const dispatch = useDispatch();
   
   useEffect(() => {

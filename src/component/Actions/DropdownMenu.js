@@ -1,10 +1,14 @@
 import { setIsChecked } from "../../store/mailSlice";
 import { useDispatch } from "react-redux";
-import { SplitButton, Form, Dropdown } from "react-bootstrap";
+// import { SplitButton, Form, Dropdown } from "react-bootstrap";
+import SplitButton from "react-bootstrap/SplitButton"
+import Form from "react-bootstrap/Form"
+import Dropdown from "react-bootstrap/Dropdown"
 
-const DropdownMenu = (props) => {
+const DropdownMenu = ({filteredMails}) => {
+
   const dispatch = useDispatch();
-  const checked = props.filteredMails.some((mail) => mail.isChecked === false);
+  const checked = filteredMails.some((mail) => mail.isChecked === false);
 
   const selectHandler = (select) => {
     // console.log('clicked check')
@@ -18,12 +22,12 @@ const DropdownMenu = (props) => {
         <Form>
           <Form.Check
             onChange={() => selectHandler("MAIN-ALL")}
-            checked={!checked && props.filteredMails.length > 0}
+            checked={!checked && filteredMails.length > 0}
           />
         </Form>
       }
       className="p-0"
-      disabled={props.filteredMails.length === 0}
+      disabled={filteredMails.length === 0}
     >
       <Dropdown.Item
         as={"button"}

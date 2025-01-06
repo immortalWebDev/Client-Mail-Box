@@ -1,5 +1,12 @@
 import React from "react";
-import { Container, Row, Col, Card, Button } from "react-bootstrap";
+// import { Container, Row, Col, Card, Button } from "react-bootstrap";
+import Container from "react-bootstrap/Container"
+import Row from "react-bootstrap/Row"
+import Col from "react-bootstrap/Col"
+import Card from "react-bootstrap/Card"
+import Button from "react-bootstrap/Button"
+
+
 import { useHistory } from "react-router-dom";
 
 const WelcomeLand = () => {

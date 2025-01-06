@@ -1,4 +1,8 @@
-import { ListGroup, Row, Col, Form } from "react-bootstrap";
+// import { ListGroup, Row, Col, Form } from "react-bootstrap";
+import ListGroup from "react-bootstrap/ListGroup"
+import Row from "react-bootstrap/Row"
+import Col from "react-bootstrap/Col"
+import Form from "react-bootstrap/Form"
 import { Link, useLocation } from "react-router-dom";
 import { setIsChecked, setRead, toggleStarred } from "../../store/mailSlice";
 import { useDispatch, useSelector } from "react-redux";

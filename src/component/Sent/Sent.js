@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import DropdownMenu from "../Actions/DropdownMenu";
-import { Button, ListGroup } from "react-bootstrap";
+// import { Button, ListGroup } from "react-bootstrap";
+import Button from "react-bootstrap/Button"
+import ListGroup from "react-bootstrap/ListGroup"
 import LoadingSpinner from "../userInterface/LoadingSpinner";
 import MailList from "../Actions/MailList";
 import { useDispatch, useSelector } from "react-redux";

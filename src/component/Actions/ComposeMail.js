@@ -1,13 +1,18 @@
-import { Editor } from "react-draft-wysiwyg";
-import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { Form, Button, InputGroup } from "react-bootstrap";
-import { useRef, useState } from "react";
+import React, {useEffect, useRef, useState,Suspense } from "react";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import InputGroup from "react-bootstrap/InputGroup";
+import LoadingSpinner from "../userInterface/LoadingSpinner";
 import { EditorState, convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import { useSelector, useDispatch } from "react-redux";
 import { showNotification } from "../../store/authSlice";
 import axios from "axios";
 import { addToInbox } from "../../store/mailSlice";
+
+const LazyEditor = React.lazy(() => import('react-draft-wysiwyg').then((module) => ({
+  default:module.Editor
+})))
 
 const ComposeMail = () => {
   const toRef = useRef();
@@ -21,6 +26,14 @@ const ComposeMail = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
+
+
+  useEffect(() => {
+    // Dynamically load the CSS insted upfront
+    import("react-draft-wysiwyg/dist/react-draft-wysiwyg.css");
+  }, []);
+
+
   const handleEditorStateChange = (newEditorState) => {
     setEditorState(newEditorState);
   };
@@ -116,7 +129,8 @@ const ComposeMail = () => {
           />
         </InputGroup>
         <Form.Group className="mb-3" controlId="textEditor">
-          <Editor
+          <Suspense fallback={<div className="d-flex justify-content-center align-items-center" style={{ height: "343px" }}><LoadingSpinner/></div>}>
+          <LazyEditor
             editorState={editorState}
             toolbarClassName="py-3 border-bottom bg-light"
             wrapperClassName="card"
@@ -124,6 +138,7 @@ const ComposeMail = () => {
             editorStyle={{ minHeight: "15rem" }}
             onEditorStateChange={handleEditorStateChange}
           />
+          </Suspense>
         </Form.Group>
         <div>
           <Button type="submit" className="rounded-1 px-4">
