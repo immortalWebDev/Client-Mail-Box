@@ -109,7 +109,7 @@ const ComposeMail = () => {
 
   return (
     <>
-      <Form onSubmit={onSubmitHandler} className="p-3 compose-mail">
+      <Form onSubmit={onSubmitHandler} className="py-4 px-2 compose-mail"> 
         <InputGroup className="mb-3">
           <InputGroup.Text id="basic-addon1">To</InputGroup.Text>
           <Form.Control
