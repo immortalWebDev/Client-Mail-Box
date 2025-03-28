@@ -30,9 +30,9 @@
     "vite": "^6.2.3"
   },
   "scripts": {
-    "start": "vite",
+    "dev": "vite",
     "build": "vite build",
-    "test": "react-scripts test"
+    "preview": "vite preview"
   },
   "eslintConfig": {
     "extends": [
