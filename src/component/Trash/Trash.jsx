@@ -17,6 +17,7 @@ import { showNotification } from "../../store/authSlice";
 import LoadingSpinner from "../userInterface/LoadingSpinner";
 
 const Trash = () => {
+    
   const mails = useSelector((state) => state.mail.mails);
   const email = useSelector((state) => state.auth.email);
 
@@ -32,8 +33,8 @@ const Trash = () => {
 
   const isDeleteEnabled = filteredMails.some((item) => item.isChecked);
 
-  const url1 = `${process.env.REACT_APP_FIREBASE_URL}/emails`;
-  const url2 = `${process.env.REACT_APP_FIREBASE_URL}/sent-emails/${senderMail}`;
+  const url1 = `${import.meta.env.VITE_FIREBASE_URL}/emails`;
+  const url2 = `${import.meta.env.VITE_FIREBASE_URL}/sent-emails/${senderMail}`;
 
   const onRestoreHandler = async () => {
     try {

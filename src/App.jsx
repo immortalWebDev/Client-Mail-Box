@@ -14,11 +14,13 @@ function App() {
 
   const { fetchData } = useFetch();
   const email = isAuthenticated ? (recipientMail ? recipientMail.replace(/[.]/g, "") : undefined)  : undefined;
+    // const email = isAuthenticated ? recipientMail.replace(/[.]/g, "") : undefined;
+
   const mails = useSelector((state) => state.mail.mails);
   const dispatch = useDispatch();
 
-  const url1 = `${process.env.REACT_APP_FIREBASE_URL}/emails.json`;
-  const url2 = `${process.env.REACT_APP_FIREBASE_URL}/sent-emails/${email}.json`;
+  const url1 = `${import.meta.env.VITE_FIREBASE_URL}/emails.json`;
+  const url2 = `${import.meta.env.VITE_FIREBASE_URL}/sent-emails/${email}.json`;
 
   const urls = useMemo(() => [url1, url2], [url1, url2]);
 

@@ -11,14 +11,18 @@ import useFetch from "../../hooks/useFetch";
 import DOMPurify from "dompurify";
 
 const MailList = (props) => {
-  // console.log(props)
+
+  
   const { mail } = props;
+  // console.log(mail)
 
   // console.log(mail)
 
   const email = useSelector((state) => state.auth.email);
   const senderMail = email.replace(/[.]/g, "");
   const location = useLocation();
+
+  // console.log(email,senderMail,location)
   const dispatch = useDispatch();
   const { fetchData } = useFetch();
 
@@ -46,8 +50,8 @@ const MailList = (props) => {
 
   const url =
     mail.sender === email
-      ? `${process.env.REACT_APP_FIREBASE_URL}/sent-emails/${senderMail}/${mail.id}.json`
-      : `${process.env.REACT_APP_FIREBASE_URL}/emails/${mail.id}.json`;
+      ? `${import.meta.env.VITE_FIREBASE_URL}/sent-emails/${senderMail}/${mail.id}.json`
+      : `${import.meta.env.VITE_FIREBASE_URL}/emails/${mail.id}.json`;
 
   const starClickHandler = (event) => {
     event.stopPropagation();

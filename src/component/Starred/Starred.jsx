@@ -11,6 +11,7 @@ import { showNotification } from "../../store/authSlice";
 import axios from "axios";
 
 const Starred = () => {
+  
   const mails = useSelector((state) => state.mail.mails);
   const email = useSelector((state) => state.auth.email);
   const isLoading = useSelector((state) => state.mail.isLoading);
@@ -19,8 +20,8 @@ const Starred = () => {
   const starredMails = mails.filter((mail) => mail.starred && !mail.isTrashed);
   const isDeleteEnabled = starredMails.some((mail) => mail.isChecked);
 
-  const url1 = `${process.env.REACT_APP_FIREBASE_URL}/emails`;
-  const url2 = `${process.env.REACT_APP_FIREBASE_URL}/sent-emails/${senderMail}`;
+  const url1 = `${import.meta.env.VITE_FIREBASE_URL}/emails`;
+  const url2 = `${import.meta.env.VITE_FIREBASE_URL}/sent-emails/${senderMail}`;
 
   const onDeleteHandler = async () => {
     try {

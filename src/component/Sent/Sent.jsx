@@ -12,6 +12,7 @@ import { showNotification } from "../../store/authSlice";
 import axios from "axios";
 
 const Sent = () => {
+  
   const mails = useSelector((state) => state.mail.mails);
   const email = useSelector((state) => state.auth.email);
   const senderMail = email.replace(/[.]/g, "");
@@ -30,7 +31,7 @@ const Sent = () => {
         .filter((mail) => mail.isChecked)
         .map((mail) =>
           axios.put(
-            `${process.env.REACT_APP_FIREBASE_URL}/sent-emails/${senderMail}/${mail.id}.json`,
+            `${import.meta.env.VITE_FIREBASE_URL}/sent-emails/${senderMail}/${mail.id}.json`,
             {
               ...mail,
               isChecked: false,

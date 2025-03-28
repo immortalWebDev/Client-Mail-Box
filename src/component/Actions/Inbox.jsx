@@ -15,6 +15,7 @@ const Inbox = () => {
 
   
   const mails = useSelector((state) => state.mail.mails);
+  // console.log(mails)
   const reversedMails = [...mails].reverse();
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.mail.isLoading);
@@ -31,7 +32,7 @@ const Inbox = () => {
         .filter((mail) => mail.isChecked)
         .map((mail) =>
           axios.put(
-            `${process.env.REACT_APP_FIREBASE_URL}/emails/${mail.id}.json`,
+            `${import.meta.env.VITE_FIREBASE_URL}/emails/${mail.id}.json`,
             {
               ...mail,
               isChecked: false,

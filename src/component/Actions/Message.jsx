@@ -26,8 +26,8 @@ const Message = () => {
   if (mails.length > 0) {
     url =
       mail.sender === email
-        ? `${process.env.REACT_APP_FIREBASE_URL}/sent-emails/${senderMail}/${mail.id}.json`
-        : `${process.env.REACT_APP_FIREBASE_URL}/emails/${mail.id}.json`;
+        ? `${import.meta.env.VITE_FIREBASE_URL}/sent-emails/${senderMail}/${mail.id}.json`
+        : `${import.meta.env.VITE_FIREBASE_URL}/emails/${mail.id}.json`;
   }
 
   const moveToTrashHandler = () => {

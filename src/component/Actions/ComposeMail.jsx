@@ -65,8 +65,8 @@ const ComposeMail = () => {
 
     if (emailInfo.recipient !== emailInfo.sender) {
       try {
-        const url1 = `${process.env.REACT_APP_FIREBASE_URL}/emails.json`;
-        const url2 = `${process.env.REACT_APP_FIREBASE_URL}/sent-emails/${email}.json`;
+        const url1 = `${import.meta.env.VITE_FIREBASE_URL}/emails.json`;
+        const url2 = `${import.meta.env.VITE_FIREBASE_URL}/sent-emails/${email}.json`;
 
         const requests = [
           axios.post(url1, emailInfo),

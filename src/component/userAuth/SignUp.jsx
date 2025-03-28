@@ -17,6 +17,7 @@ import LoadingSpinner from "../userInterface/LoadingSpinner"
 const LazyNotification  = lazy(() => import("../userInterface/Notification"))
 
 const SignUp = () => {
+  
   const [enteredEmail, setEnteredEmail] = useState("");
   const [enteredPassword, setEnteredPassword] = useState("");
   const [enteredConfirmPassword, setEnteredConfirmPassword] = useState("");
@@ -55,8 +56,8 @@ const SignUp = () => {
   };
 
   const endPointUrl = signIn
-    ? `${process.env.REACT_APP_SINGIN_URL}${apiKey}`
-    : `${process.env.REACT_APP_SINGUP_URL}${apiKey}`;
+    ? `${import.meta.env.VITE_SINGIN_URL}${apiKey}`
+    : `${import.meta.env.VITE_SINGUP_URL}${apiKey}`;
 
   const onSubmitHandler = async (event) => {
     try {
@@ -68,6 +69,9 @@ const SignUp = () => {
         return;
       if (emailHasError || passwordHasError) return;
       dispatch(setIsLoading(true));
+
+      // console.log("Endpoint URL:", endPointUrl); // Log the endpoint URL
+
 
       const response = await axios.post(endPointUrl, {
         email: enteredEmail,
@@ -101,6 +105,7 @@ const SignUp = () => {
           })
         );
       } else {
+        // console.log(error)
         const { data } = error.response;
         const { message } = data.error;
         if (message === "INVALID_LOGIN_CREDENTIALS") {
