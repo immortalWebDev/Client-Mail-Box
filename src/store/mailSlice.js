@@ -9,8 +9,14 @@ const mailSlice = createSlice({
   name: "mail",
   initialState: initialMailBoxState,
   reducers: {
+    // addToInbox: (state, action) => {
+    //   state.mails.push(...action.payload);
+    // },//filtered to prevent duplication
     addToInbox: (state, action) => {
-      state.mails.push(...action.payload);
+      const newMails = action.payload.filter(
+        (newMail) => !state.mails.some((mail) => mail.id === newMail.id)
+      );
+      state.mails = [...state.mails, ...newMails];
     },
 
     setIsChecked: (state, action) => {
