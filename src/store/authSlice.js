@@ -4,7 +4,7 @@ const initialAuthState = {
   isAuthenticated: localStorage.getItem("isAuthenticated"),
   idToken: localStorage.getItem("idToken"),
   email: localStorage.getItem("email"),
-  apiKey: process.env.REACT_APP_FIREBASE_API,
+  apiKey: import.meta.env.VITE_FIREBASE_API,
   isLoading: false,
   notification: {
     message: null,
