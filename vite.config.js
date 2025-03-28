@@ -9,6 +9,7 @@ export default defineConfig({
   build: {
     outDir: 'dist', // Optional: Match CRA's output directory
   },
+  base: '/', // Ensure the base path is correct (use '/' for root deployment)
   css: {
     preprocessorOptions: {
       scss: {
