@@ -31,7 +31,7 @@
   },
   "scripts": {
     "start": "vite",
-    "build": "vite build && postcss build/static/css/*.css --dir build/static/css/",
+    "build": "vite build",
     "test": "react-scripts test"
   },
   "eslintConfig": {

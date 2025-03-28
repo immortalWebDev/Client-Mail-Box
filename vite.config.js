@@ -7,7 +7,7 @@ export default defineConfig({
 //     port: 3000, // Optional: Match CRA's default port
 //   },
   build: {
-    outDir: 'build', // Optional: Match CRA's output directory
+    outDir: 'dist', // Optional: Match CRA's output directory
   },
   css: {
     preprocessorOptions: {
