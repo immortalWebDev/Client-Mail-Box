@@ -10,8 +10,11 @@ const Logout = () => {
   const history = useHistory();
 
   const logoutHandler = () => {
+
+    localStorage.setItem("manualLogout", true);
     dispatch(logout());
     history.replace("/auth");
+    
   };
   return (
     <Button
