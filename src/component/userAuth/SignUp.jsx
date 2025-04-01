@@ -79,9 +79,10 @@ const SignUp = () => {
         returnSecureToken: true,
       });
       const data = response.data;
+      // console.log(response.data)
       if (response.status === 200) {
         if (signIn) {
-          dispatch(login({ idToken: data.idToken, email: data.email }));
+          dispatch(login({ idToken: data.idToken, email: data.email ,refreshToken:data.refreshToken,expiresIn:data.expiresIn}));
           history.replace("/Sidebar");
         } else {
           const message =
@@ -89,6 +90,7 @@ const SignUp = () => {
           dispatch(showNotification({ message: message, variant: "success" }));
         }
       }
+      
     } catch (error) {
       // const { data } = error.response;
 
@@ -105,9 +107,11 @@ const SignUp = () => {
           })
         );
       } else {
-        // console.log(error)
+        
         const { data } = error.response;
         const { message } = data.error;
+        // console.log(error)
+        // console.log(data)
         if (message === "INVALID_LOGIN_CREDENTIALS") {
           dispatch(
             showNotification({
@@ -115,6 +119,14 @@ const SignUp = () => {
               variant: "danger",
             })
           );
+        }else if(message === "EMAIL_EXISTS"){
+           // Handle the case where the email is already registered
+        dispatch(
+          showNotification({
+            message: "This email is already registered. Please log in instead.",
+            variant: "primary",
+          })
+        );
         }
       }
     } finally {
