@@ -1,0 +1,35 @@
+diff --git a/node_modules/draft-js/lib/editOnBeforeInput.js b/node_modules/draft-js/lib/editOnBeforeInput.js
+index a1d9d81..aeded39 100644
+--- a/node_modules/draft-js/lib/editOnBeforeInput.js
++++ b/node_modules/draft-js/lib/editOnBeforeInput.js
+@@ -24,7 +24,7 @@ var isSelectionAtLeafStart = require("./isSelectionAtLeafStart");
+ 
+ var nullthrows = require("fbjs/lib/nullthrows");
+ 
+-var setImmediate = require("fbjs/lib/setImmediate"); // When nothing is focused, Firefox regards two characters, `'` and `/`, as
++// var setImmediate = require("fbjs/lib/setImmediate"); // When nothing is focused, Firefox regards two characters, `'` and `/`, as
+ // commands that should open and focus the "quickfind" search bar. This should
+ // *never* happen while a contenteditable is focused, but as of v28, it
+ // sometimes does, even when the keypress event target is the contenteditable.
+@@ -191,12 +191,18 @@ function editOnBeforeInput(editor, e) {
+   // we see in the DOM will already have been inserted properly.
+ 
+   editor._pendingStateFromBeforeInput = newEditorState;
+-  setImmediate(function () {
++  // setImmediate(function () {
++  //   if (editor._pendingStateFromBeforeInput !== undefined) {
++  //     editor.update(editor._pendingStateFromBeforeInput);
++  //     editor._pendingStateFromBeforeInput = undefined;
++  //   }
++  // });
++  setTimeout(function () {
+     if (editor._pendingStateFromBeforeInput !== undefined) {
+       editor.update(editor._pendingStateFromBeforeInput);
+       editor._pendingStateFromBeforeInput = undefined;
+     }
+-  });
++  }, 0);
+ }
+ 
+ module.exports = editOnBeforeInput;
+\ No newline at end of file
