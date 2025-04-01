@@ -15,11 +15,16 @@ import {
 } from "../../store/mailSlice";
 import { showNotification } from "../../store/authSlice";
 import LoadingSpinner from "../userInterface/LoadingSpinner";
+import { getToken } from "../../firebaseHelper";
 
 const Trash = () => {
     
   const mails = useSelector((state) => state.mail.mails);
   const email = useSelector((state) => state.auth.email);
+  const token = useSelector((state) => state.auth.idToken);
+  const tokenExpiry = useSelector((state) => state.auth.tokenExpiry);
+
+
 
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -36,6 +41,16 @@ const Trash = () => {
   const url1 = `${import.meta.env.VITE_FIREBASE_URL}/emails`;
   const url2 = `${import.meta.env.VITE_FIREBASE_URL}/sent-emails/${senderMail}`;
 
+  
+  const checkToken = () => {
+    if (token && Date.now() > tokenExpiry) {
+      return getToken();
+    }
+  };
+
+  const validToken = checkToken() || token;
+
+
   const onRestoreHandler = async () => {
     try {
       const updatedPromises = filteredMails
@@ -43,8 +58,8 @@ const Trash = () => {
         .map((mail) =>
           axios.put(
             mail.sender === email
-              ? `${url2}/${mail.id}.json`
-              : `${url1}/${mail.id}.json`,
+              ? `${url2}/${mail.id}.json?auth=${validToken}`
+              : `${url1}/${mail.id}.json?auth=${validToken}`,
             {
               ...mail,
               isChecked: false,
@@ -72,8 +87,8 @@ const Trash = () => {
       const updatedPromises = filteredMails.map((mail) =>
         axios.delete(
           mail.sender === email
-            ? `${url2}/${mail.id}.json`
-            : `${url1}/${mail.id}.json`
+            ? `${url2}/${mail.id}.json?auth=${validToken}`
+            : `${url1}/${mail.id}.json?auth=${validToken}`
         )
       );
       await Promise.all(updatedPromises);

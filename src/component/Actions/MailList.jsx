@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import useFetch from "../../hooks/useFetch";
 import DOMPurify from "dompurify";
+import { getToken } from "../../firebaseHelper";
 
 const MailList = (props) => {
 
@@ -19,6 +20,10 @@ const MailList = (props) => {
   // console.log(mail)
 
   const email = useSelector((state) => state.auth.email);
+  const token = useSelector((state) => state.auth.idToken);
+  const tokenExpiry = useSelector((state) => state.auth.tokenExpiry);
+
+
   const senderMail = email.replace(/[.]/g, "");
   const location = useLocation();
 
@@ -48,10 +53,20 @@ const MailList = (props) => {
     setIsHovered(false);
   };
 
+  
+  const checkToken = () => {
+    if (token && Date.now() > tokenExpiry) {
+      return getToken();
+    }
+  };
+
+  const validToken = checkToken() || token;
+
+
   const url =
     mail.sender === email
-      ? `${import.meta.env.VITE_FIREBASE_URL}/sent-emails/${senderMail}/${mail.id}.json`
-      : `${import.meta.env.VITE_FIREBASE_URL}/emails/${mail.id}.json`;
+      ? `${import.meta.env.VITE_FIREBASE_URL}/sent-emails/${senderMail}/${mail.id}.json?auth=${validToken}`
+      : `${import.meta.env.VITE_FIREBASE_URL}/emails/${mail.id}.json?auth=${validToken}`;
 
   const starClickHandler = (event) => {
     event.stopPropagation();

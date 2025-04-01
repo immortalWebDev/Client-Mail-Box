@@ -8,6 +8,7 @@ import { moveToTrash, deleteForever } from "../../store/mailSlice";
 import { showNotification } from "../../store/authSlice";
 import DOMPurify from "dompurify";
 import useFetch from "../../hooks/useFetch";
+import { getToken } from "../../firebaseHelper";
 
 const Message = () => {
 
@@ -19,15 +20,30 @@ const Message = () => {
   const mail = mails.find((mail) => mail.id === messageId);
   const history = useHistory();
   const email = useSelector((state) => state.auth.email);
+  const token = useSelector((state) => state.auth.idToken);
+  const tokenExpiry = useSelector((state) => state.auth.tokenExpiry);
+
+
+
   const senderMail = email.replace(/[.]/g, "");
   const { fetchData } = useFetch();
+
+  
+  const checkToken = () => {
+    if (token && Date.now() > tokenExpiry) {
+      return getToken();
+    }
+  };
+
+  const validToken = checkToken() || token;
+
 
   let url;
   if (mails.length > 0) {
     url =
       mail.sender === email
-        ? `${import.meta.env.VITE_FIREBASE_URL}/sent-emails/${senderMail}/${mail.id}.json`
-        : `${import.meta.env.VITE_FIREBASE_URL}/emails/${mail.id}.json`;
+        ? `${import.meta.env.VITE_FIREBASE_URL}/sent-emails/${senderMail}/${mail.id}.json?auth=${validToken}`
+        : `${import.meta.env.VITE_FIREBASE_URL}/emails/${mail.id}.json?auth=${validToken}`;
   }
 
   const moveToTrashHandler = () => {

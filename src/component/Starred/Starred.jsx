@@ -9,12 +9,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { moveFromStarred, setIsChecked } from "../../store/mailSlice";
 import { showNotification } from "../../store/authSlice";
 import axios from "axios";
+import { getToken } from "../../firebaseHelper";
 
 const Starred = () => {
   
   const mails = useSelector((state) => state.mail.mails);
   const email = useSelector((state) => state.auth.email);
   const isLoading = useSelector((state) => state.mail.isLoading);
+  const token = useSelector((state) => state.auth.idToken);
+  const tokenExpiry = useSelector((state) => state.auth.tokenExpiry);
+
+
   const dispatch = useDispatch();
   const senderMail = email.replace(/[.]/g, "");
   const starredMails = mails.filter((mail) => mail.starred && !mail.isTrashed);
@@ -23,6 +28,16 @@ const Starred = () => {
   const url1 = `${import.meta.env.VITE_FIREBASE_URL}/emails`;
   const url2 = `${import.meta.env.VITE_FIREBASE_URL}/sent-emails/${senderMail}`;
 
+  
+  const checkToken = () => {
+    if (token && Date.now() > tokenExpiry) {
+      return getToken();
+    }
+  };
+
+  const validToken = checkToken() || token;
+
+
   const onDeleteHandler = async () => {
     try {
       const updatedPromises = starredMails
@@ -30,9 +45,9 @@ const Starred = () => {
         .map((mail) => {
           let url;
           if (mail.sender === email) {
-            url = `${url2}/${mail.id}.json`;
+            url = `${url2}/${mail.id}.json?auth=${validToken}`;
           } else {
-            url = `${url1}/${mail.id}.json`;
+            url = `${url1}/${mail.id}.json?auth=${validToken}`;
           }
 
           return axios.put(url, {

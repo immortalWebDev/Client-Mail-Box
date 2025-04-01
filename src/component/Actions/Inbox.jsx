@@ -10,6 +10,7 @@ import { moveFromInbox, setIsChecked } from "../../store/mailSlice";
 import LoadingSpinner from "../userInterface/LoadingSpinner";
 import { showNotification } from "../../store/authSlice";
 import DropdownMenu from "../Actions/DropdownMenu";
+import { getToken } from "../../firebaseHelper";
 
 const Inbox = () => {
 
@@ -20,11 +21,25 @@ const Inbox = () => {
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.mail.isLoading);
   const email = useSelector((state) => state.auth.email);
+  const token = useSelector((state) => state.auth.idToken);
+  const tokenExpiry = useSelector((state) => state.auth.tokenExpiry);
+
+
   const filteredMails = reversedMails.filter(
     (mail) => mail.isTrashed === false && mail.recipient === email
   );
 
   const isDeleteEnabled = filteredMails.some((mail) => mail.isChecked);
+
+  
+  const checkToken = () => {
+    if (token && Date.now() > tokenExpiry) {
+      return getToken();
+    }
+  };
+
+  const validToken = checkToken() || token;
+
 
   const onDeleteHandler = async () => {
     try {
@@ -32,7 +47,7 @@ const Inbox = () => {
         .filter((mail) => mail.isChecked)
         .map((mail) =>
           axios.put(
-            `${import.meta.env.VITE_FIREBASE_URL}/emails/${mail.id}.json`,
+            `${import.meta.env.VITE_FIREBASE_URL}/emails/${mail.id}.json?auth=${validToken}`,
             {
               ...mail,
               isChecked: false,

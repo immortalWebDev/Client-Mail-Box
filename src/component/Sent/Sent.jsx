@@ -10,11 +10,16 @@ import { Link } from "react-router-dom";
 import { moveFromSent, setIsChecked } from "../../store/mailSlice";
 import { showNotification } from "../../store/authSlice";
 import axios from "axios";
+import { getToken } from "../../firebaseHelper";
 
 const Sent = () => {
   
   const mails = useSelector((state) => state.mail.mails);
   const email = useSelector((state) => state.auth.email);
+  const token = useSelector((state) => state.auth.idToken);
+  const tokenExpiry = useSelector((state) => state.auth.tokenExpiry);
+
+
   const senderMail = email.replace(/[.]/g, "");
 
   const reversedMails = [...mails].reverse();
@@ -25,13 +30,23 @@ const Sent = () => {
   const isLoading = useSelector((state) => state.mail.isLoading);
   const dispatch = useDispatch();
   const isDeleteEnabled = sentMails.some((mail) => mail.isChecked);
+
+  
+  const checkToken = () => {
+    if (token && Date.now() > tokenExpiry) {
+      return getToken();
+    }
+  };
+
+  const validToken = checkToken() || token;
+
   const onDeleteHandler = async () => {
     try {
       const updatedPromises = sentMails
         .filter((mail) => mail.isChecked)
         .map((mail) =>
           axios.put(
-            `${import.meta.env.VITE_FIREBASE_URL}/sent-emails/${senderMail}/${mail.id}.json`,
+            `${import.meta.env.VITE_FIREBASE_URL}/sent-emails/${senderMail}/${mail.id}.json?auth=${validToken}`,
             {
               ...mail,
               isChecked: false,
