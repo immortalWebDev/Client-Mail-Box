@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState,Suspense } from "react";
+import React, { useEffect, useRef, useState, Suspense } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
@@ -9,10 +9,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { showNotification } from "../../store/authSlice";
 import axios from "axios";
 import { addToInbox } from "../../store/mailSlice";
+import { getToken } from "../../firebaseHelper";
 
-const LazyEditor = React.lazy(() => import('react-draft-wysiwyg').then((module) => ({
-  default:module.Editor
-})))
+const LazyEditor = React.lazy(() =>
+  import("react-draft-wysiwyg").then((module) => ({
+    default: module.Editor,
+  }))
+);
 
 const ComposeMail = () => {
   const toRef = useRef();
@@ -20,6 +23,10 @@ const ComposeMail = () => {
   const senderEmail = useSelector((state) => state.auth.email);
   // const email = senderEmail.replace(/[.]/g, "");
   const email = senderEmail ? senderEmail.replace(/[.]/g, "") : undefined;
+  const token = useSelector((state) => state.auth.idToken);
+  const tokenExpiry = useSelector((state) => state.auth.tokenExpiry);
+
+  // console.log(token === localStorage.getItem("idToken"))
 
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
@@ -27,12 +34,10 @@ const ComposeMail = () => {
 
   const dispatch = useDispatch();
 
-
   useEffect(() => {
     // Dynamically load the CSS insted upfront
     import("react-draft-wysiwyg/dist/react-draft-wysiwyg.css");
   }, []);
-
 
   const handleEditorStateChange = (newEditorState) => {
     setEditorState(newEditorState);
@@ -63,10 +68,24 @@ const ComposeMail = () => {
       timestamp: timestamp,
     };
 
+    // debugger
+    const checkToken = () => {
+      if (token && Date.now() > tokenExpiry) {
+        return getToken();
+      }
+    };
+
+    const validToken = checkToken() || token;
+    // console.log(validToken)
+
     if (emailInfo.recipient !== emailInfo.sender) {
       try {
-        const url1 = `${import.meta.env.VITE_FIREBASE_URL}/emails.json`;
-        const url2 = `${import.meta.env.VITE_FIREBASE_URL}/sent-emails/${email}.json`;
+        const url1 = `${
+          import.meta.env.VITE_FIREBASE_URL
+        }/emails.json?auth=${validToken}`;
+        const url2 = `${
+          import.meta.env.VITE_FIREBASE_URL
+        }/sent-emails/${email}.json?auth=${validToken}`;
 
         const requests = [
           axios.post(url1, emailInfo),
@@ -109,7 +128,7 @@ const ComposeMail = () => {
 
   return (
     <>
-      <Form onSubmit={onSubmitHandler} className="py-4 px-2 compose-mail"> 
+      <Form onSubmit={onSubmitHandler} className="py-4 px-2 compose-mail">
         <InputGroup className="mb-3">
           <InputGroup.Text id="basic-addon1">To</InputGroup.Text>
           <Form.Control
@@ -129,15 +148,24 @@ const ComposeMail = () => {
           />
         </InputGroup>
         <Form.Group className="mb-3" controlId="textEditor">
-          <Suspense fallback={<div className="d-flex justify-content-center align-items-center" style={{ height: "343px" }}><LoadingSpinner/></div>}>
-          <LazyEditor
-            editorState={editorState}
-            toolbarClassName="py-3 border-bottom bg-light"
-            wrapperClassName="card"
-            editorClassName="card-body pt-0"
-            editorStyle={{ minHeight: "15rem" }}
-            onEditorStateChange={handleEditorStateChange}
-          />
+          <Suspense
+            fallback={
+              <div
+                className="d-flex justify-content-center align-items-center"
+                style={{ height: "343px" }}
+              >
+                <LoadingSpinner />
+              </div>
+            }
+          >
+            <LazyEditor
+              editorState={editorState}
+              toolbarClassName="py-3 border-bottom bg-light"
+              wrapperClassName="card"
+              editorClassName="card-body pt-0"
+              editorStyle={{ minHeight: "15rem" }}
+              onEditorStateChange={handleEditorStateChange}
+            />
           </Suspense>
         </Form.Group>
         <div>
