@@ -87,6 +87,7 @@ const ComposeMail = () => {
           import.meta.env.VITE_FIREBASE_URL
         }/sent-emails/${email}.json?auth=${validToken}`;
 
+        // debugger
         const requests = [
           axios.post(url1, emailInfo),
           axios.post(url2, emailInfo),
@@ -104,10 +105,16 @@ const ComposeMail = () => {
             ...emailInfo,
           };
 
+          
           dispatch(addToInbox([mailItem]));
           dispatch(
             showNotification({ message: "Email Sent", variant: "success" })
           );
+
+           // Clear the input fields after the email is sent
+        toRef.current.value = "";
+        subjectRef.current.value = "";
+        setEditorState(EditorState.createEmpty());
         }
       } catch (error) {
         console.error(error.message);
