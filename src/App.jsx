@@ -15,6 +15,32 @@ function App() {
   const dispatch = useDispatch();
   const history = useHistory();
 
+  useEffect(() => {
+    const handleStorageChange = () => {
+      // Check if the required authentication keys are missing from localStorage
+      const idToken = localStorage.getItem("idToken");
+      const refreshToken = localStorage.getItem("refreshToken");
+      const isAuthenticated = localStorage.getItem("isAuthenticated");
+
+      if (!idToken || !refreshToken || !isAuthenticated) {
+        // Log out the user if authentication keys are missing
+        dispatch(logout());
+        history.replace("/auth");
+        dispatch(
+          showNotification({ message: "Oops! Looks like you've been logged out. Please login again", variant: "danger" })
+        );
+      }
+    };
+
+    // Listen for changes to localStorage
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      // Clean up the event listener when the component unmounts
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, [dispatch, history]);
+
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const recipientMail = useSelector((state) => state.auth.email);
   const token = useSelector((state) => state.auth.idToken);
