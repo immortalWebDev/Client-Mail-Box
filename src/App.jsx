@@ -56,21 +56,22 @@ function App() {
 
   const [validToken, setValidToken] = useState(null);
 
-  // Function to validate or refresh the token
-  const checkToken = async () => {
-    if (token && Date.now() < tokenExpiry) {
-      return token; // Token is still valid
-    } else {
-      return await getToken(); // Refresh the token if expired
-    }
-  };
+  // // Function to validate or refresh the token
+  // const checkToken = async () => {
+  //   if (token && Date.now() < tokenExpiry) {
+  //     return token; // Token is still valid
+  //   } else {
+  //     return await getToken(); // Refresh the token if expired
+  //   }
+  // };
 
   // Fetch a valid token when the user is authenticated
   useEffect(() => {
     const fetchValidToken = async () => {
       if (isAuthenticated) {
         try {
-          const token = await checkToken();
+          // const token = await checkToken();
+          const token = await getToken()
           setValidToken(token); // Set the valid token in state
         } catch (error) {
           console.error("Error fetching token:", error);
@@ -166,28 +167,31 @@ function App() {
     };
 
     const interval = setInterval(() => {
-      if (Date.now() < tokenExpiry) {
-        // console.log(recipientMail)
-        // console.log(validToken)
-        // console.log(tokenExpiry);
-        // console.log(url1);
-        // console.log("Token is valid");
-        fetchData(url1, "GET", null, onSuccess);
-      } else {
-        //   window.location.reload()
-        clearInterval(interval); // Prevent multiple logouts
-        dispatch(logout());
-        history.replace("/auth");
+      if (isAuthenticated) {
+        if (Date.now() < tokenExpiry) {
+          // console.log(recipientMail)
+          // console.log(validToken)
+          // console.log(tokenExpiry);
+          // console.log(url1);
+          // console.log("Token is valid");
+          fetchData(url1, "GET", null, onSuccess);
+        } else {
+          //   window.location.reload()
+          alert("Session expired, You need to login again")
+          clearInterval(interval); // Prevent multiple logouts
+          dispatch(logout());
+          history.replace("/auth");
 
-        if (!localStorage.getItem("manualLogout")) {
-          dispatch(
-            showNotification({
-              message: "Session expired, Please login again",
-              variant: "info",
-            })
-          );
-          localStorage.removeItem("manualLogout");
-          console.log("Session expired. Please Login again");
+          if (!localStorage.getItem("manualLogout")) {
+            dispatch(
+              showNotification({
+                message: "Session expired, Please login again",
+                variant: "info",
+              })
+            );
+            localStorage.removeItem("manualLogout");
+            console.log("Session expired. Please Login again");
+          }
         }
       }
     }, 5000);
