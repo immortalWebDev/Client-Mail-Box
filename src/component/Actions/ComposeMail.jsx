@@ -140,7 +140,7 @@ const ComposeMail = () => {
           <InputGroup.Text id="basic-addon1">To</InputGroup.Text>
           <Form.Control
             type="email"
-            placeholder="Enter receivers Email id"
+            placeholder="Enter receivers Mail express id"
             ref={toRef}
             required
           />

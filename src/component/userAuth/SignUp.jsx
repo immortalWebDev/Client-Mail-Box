@@ -33,6 +33,18 @@ const SignUp = () => {
   const [signIn, setSignIn] = useState(true);
   const history = useHistory();
 
+    
+    const DEMO_USER = {
+    email: "cisco@me.com",
+    password: "cisco@me.com"
+  };
+
+  function handleDemo(){
+    setEnteredEmail(DEMO_USER.email)
+    setEnteredPassword(DEMO_USER.password)
+  }
+
+
 
   // Preload the image when the component mounts
   useEffect(() => {
@@ -283,12 +295,21 @@ const SignUp = () => {
               )}
               <div className="text-center mt-4">
                 {signIn ? (
+                  <>
                   <Button
                     type="submit"
                     className={`w-100 mt-2 rounded-3 border-2 text-white fw-bold`}
                   >
                     {isLoading ? "Logging in..." : "Login"}
                   </Button>
+                  <Button
+                    // type="submit"
+                    className={`w-100 mt-2 rounded-3 border-2 text-white fw-bold`}
+                    onClick={handleDemo}
+                  >
+                    Use demo credentials!
+                  </Button>
+                  </>
                 ) : (
                   <Button
                     type="submit"
